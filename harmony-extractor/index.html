@@ -1,0 +1,324 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="音声を読み込んで、ハーモニクスとサブハーモニクスを聴き比べる。ブラウザで使える音楽・調性の実験ツール。"
+    />
+    <meta name="theme-color" content="#111b33" />
+    <title>Harmony Extractor — 音楽を、ふたつの響きから。</title>
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23111b33'/%3E%3Cpath d='M8 9v14m16-14v14M8 16h16' stroke='%236dadff' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23ff857c'/%3E%3C/svg%3E"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="masthead">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">H<span>∿</span>S</span>
+        <div>
+          <h1>Harmony Extractor</h1>
+          <p>音楽を、ふたつの響きから。</p>
+        </div>
+      </div>
+      <span class="privacy">音声はブラウザ内で処理されます</span>
+    </header>
+    <main>
+      <section
+        class="drop-zone"
+        id="drop-zone"
+        aria-label="音声ファイルの読み込み"
+      >
+        <div class="file-icon" aria-hidden="true">♫</div>
+        <div class="file-copy">
+          <h2 id="file-name">音声ファイルをここにドロップ</h2>
+          <p id="file-detail">
+            MP3・WAVなど · お好きな曲で聴き比べてみましょう
+          </p>
+        </div>
+        <button id="open-file" class="button primary">ファイルを選択</button
+        ><input
+          type="file"
+          id="file-input"
+          accept="audio/*,.mp3,.wav,.aiff,.aif,.m4a,.flac,.ogg"
+          hidden
+        />
+      </section>
+      <div class="workspace">
+        <aside class="panel settings">
+          <h2><span class="step">01</span> フィルターを選ぶ</h2>
+          <div class="filter-list" role="group" aria-label="フィルター">
+            <button
+              class="filter-card selected"
+              data-filter="branch"
+              aria-pressed="true"
+            >
+              <span class="filter-symbol">H / S</span
+              ><span
+                ><strong>H・S 倍音枝</strong
+                ><small>倍音・サブハーモニクスの系列</small></span
+              >
+            </button>
+            <button class="filter-card" data-filter="et" aria-pressed="false">
+              <span class="filter-symbol">12</span
+              ><span
+                ><strong>長・短 平均律</strong
+                ><small>メジャーと自然短音階</small></span
+              >
+            </button>
+            <button
+              class="filter-card"
+              data-filter="custom"
+              aria-pressed="false"
+            >
+              <span class="filter-symbol">1,3…</span
+              ><span
+                ><strong>カスタム倍音</strong
+                ><small>好きな番号で響きを探す</small></span
+              >
+            </button>
+          </div>
+          <p class="muted filter-description" id="filter-description">
+            3つの倍音枝から生まれる、ハーモニクスとサブハーモニクスの響きを比較します。
+          </p>
+          <div id="custom-editor" hidden>
+            <label for="custom-numbers">倍音番号</label
+            ><input
+              id="custom-numbers"
+              type="text"
+              value="1, 3, 5"
+              autocomplete="off"
+              spellcheck="false"
+              aria-describedby="custom-hint custom-error"
+            />
+            <p class="small" id="custom-hint">
+              音名選択のため、奇数のみが意味を持ちます。偶数は2で割り切れなくなるまで割った奇数として扱います（例：12
+              → 3）。重複は無視されます。
+            </p>
+            <p class="small">
+              1, 3,
+              5はハーモニクスではメジャーコード、サブハーモニクスではマイナーコードを意味します。
+            </p>
+            <p id="custom-effective" class="small"></p>
+            <p id="custom-error" class="error" role="alert"></p>
+          </div>
+          <div class="divider"></div>
+          <label for="link-mode">音名基準のつながり</label>
+          <select id="link-mode">
+            <option value="odd" selected>Odd Link · 奇数倍で連動</option>
+            <option value="same">Link · 同じ位置で連動</option>
+            <option value="free">それぞれ独立して操作</option>
+          </select>
+          <div class="odd-row" id="odd-row">
+            <label for="odd-number">奇数倍</label
+            ><input
+              id="odd-number"
+              type="number"
+              min="1"
+              max="99999"
+              step="2"
+              value="3"
+            /><span id="odd-detail" class="small">×3 · 同主調的な配置</span>
+          </div>
+          <p id="link-error" class="error" role="alert"></p>
+          <label class="check correction"
+            ><input id="tonic-correction" type="checkbox" /><span
+              >音楽理論的短調主音に合わせる</span
+            ></label
+          >
+          <p class="small" id="correction-note">
+            サブハーモニクス側の音名を完全五度下で読みます。音は変わりません。
+          </p>
+        </aside>
+        <section class="panel analysis">
+          <div class="section-heading">
+            <h2><span class="step">02</span> 音名基準を探す</h2>
+            <span class="badge">ENERGY CURVE</span>
+          </div>
+          <div class="curve-legend" role="group" aria-label="曲線の表示">
+            <label class="legend a"
+              ><input type="checkbox" id="show-a" checked /><span id="legend-a"
+                >ハーモニクス</span
+              ></label
+            ><label class="legend b"
+              ><input type="checkbox" id="show-b" checked /><span id="legend-b"
+                >サブハーモニクス</span
+              ></label
+            ><label class="legend mix"
+              ><input type="checkbox" id="show-mix" checked />Both Mix</label
+            >
+          </div>
+          <div class="chart-wrap">
+            <canvas
+              id="energy-chart"
+              aria-label="音名基準と通過エネルギーの曲線。下のスライダーでも位置を操作できます。"
+            ></canvas>
+            <div id="chart-empty">
+              <strong>曲の中にある響きを見つけよう</strong
+              ><span
+                >音声を読み込むと、3本のエネルギー曲線が表示されます。</span
+              >
+            </div>
+          </div>
+          <div class="analysis-status">
+            <span id="status" role="status" aria-live="polite"
+              >音声ファイルを待っています</span
+            ><progress
+              id="analysis-progress"
+              max="100"
+              value="0"
+              hidden
+            ></progress>
+          </div>
+          <div class="peak-controls">
+            <label for="peak-source">最大点の対象</label
+            ><select id="peak-source">
+              <option value="a">ハーモニクス</option>
+              <option value="b">サブハーモニクス</option>
+              <option value="mix" selected>Both Mix</option></select
+            ><button id="go-maximum" class="button" disabled>最大点へ</button
+            ><label class="check"
+              ><input
+                id="auto-follow"
+                type="checkbox"
+                checked
+              />常に最大点に追従する</label
+            >
+          </div>
+          <div class="peak-summary">
+            <span id="peak-value">最大点 —</span>
+            <div class="local-peaks">
+              <button
+                id="peak-prev"
+                aria-label="ひとつ上の順位の局所ピーク"
+                disabled
+              >
+                ‹</button
+              ><button id="go-peak" disabled>局所ピーク —</button
+              ><button
+                id="peak-next"
+                aria-label="ひとつ下の順位の局所ピーク"
+                disabled
+              >
+                ›
+              </button>
+            </div>
+          </div>
+          <div class="key-control a">
+            <label for="key-a" id="key-a-name">ハーモニクス</label
+            ><output id="key-a-label">A +0.0 cent</output
+            ><input
+              type="range"
+              id="key-a"
+              min="0"
+              max="11999"
+              step="1"
+              value="0"
+              aria-label="ハーモニクスの音名基準"
+            /><input
+              class="cent-input"
+              type="number"
+              id="cent-a"
+              min="0"
+              max="1199.9"
+              step="0.1"
+              value="0"
+              aria-label="第1系列のAからのcent位置"
+            /><span class="unit">cent</span>
+          </div>
+          <div class="key-control b">
+            <label for="key-b" id="key-b-name">サブハーモニクス</label
+            ><output id="key-b-label">E +2.0 cent</output
+            ><input
+              type="range"
+              id="key-b"
+              min="0"
+              max="11999"
+              step="1"
+              value="7020"
+              aria-label="サブハーモニクスの音名基準"
+            /><input
+              class="cent-input"
+              type="number"
+              id="cent-b"
+              min="0"
+              max="1199.9"
+              step="0.1"
+              value="702"
+              aria-label="第2系列のAからのcent位置"
+            /><span class="unit">cent</span>
+          </div>
+          <p class="chart-note">
+            横軸はAから次のAまで。グラフをクリックして基準位置を変更できます。Both
+            Mixは第1系列の基準位置で表示します。
+          </p>
+        </section>
+      </div>
+      <section class="panel player">
+        <div class="section-heading">
+          <h2><span class="step">03</span> 響きを聴き比べる</h2>
+          <span id="listening" class="small">ハーモニクスを選択中</span>
+        </div>
+        <div class="listen-modes" role="group" aria-label="聴く音声">
+          <button data-listen="original" aria-pressed="false">原音</button
+          ><button
+            data-listen="a"
+            class="active a"
+            aria-pressed="true"
+            id="listen-a"
+          >
+            ハーモニクス</button
+          ><button data-listen="b" class="b" aria-pressed="false" id="listen-b">
+            サブハーモニクス</button
+          ><button data-listen="mix" class="mix" aria-pressed="false">
+            Both Mix</button
+          ><button data-listen="stereo" aria-pressed="false">
+            ステレオ（トリッピーです⚠）
+          </button>
+        </div>
+        <div class="transport">
+          <button id="play" class="button primary" disabled>▶ 再生</button
+          ><button id="stop" class="button" disabled>停止</button
+          ><input
+            type="range"
+            id="seek"
+            min="0"
+            max="10000"
+            value="0"
+            aria-label="再生位置"
+            disabled
+          /><output id="time">0:00 / 0:00</output
+          ><label for="volume">音量</label
+          ><input
+            type="range"
+            id="volume"
+            min="0"
+            max="100"
+            value="75"
+            aria-label="音量"
+          />
+        </div>
+      </section>
+      <footer>
+        <span
+          >Harmony Extractor
+          <span class="footer-version">WEB EDITION</span></span
+        ><span>PC向け · A4 = 440 Hz</span>
+      </footer>
+    </main>
+    <noscript>このアプリを使うにはJavaScriptを有効にしてください。</noscript>
+    <script>
+      if (location.protocol === "file:") {
+        document.getElementById("status").textContent =
+          "GitHub PagesまたはローカルHTTPサーバーから開いてください。手順はREADME.mdにあります。";
+        document.getElementById("file-detail").textContent =
+          "ファイルの直接表示では音声処理を利用できません。";
+      }
+    </script>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
