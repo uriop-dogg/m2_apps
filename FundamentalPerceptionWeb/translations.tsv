@@ -1,0 +1,108 @@
+基音の知覚・シミュレーター.web	Fundamental Perception Simulator.web
+入力を変更	Change input
+音声入力	Audio input
+音声を開く	Open audio
+未選択	No file selected
+▶ 再生	▶ Play
+Ⅱ 一時停止	Ⅱ Pause
+■ 停止	■ Stop
+▶ 発音	▶ Play tones
+再生位置	Playback position
+解析範囲	Analysis scope
+現在位置	Current position
+音声全体（STFT平均）	Whole audio (STFT average)
+マイク入力	Microphone input
+マイクを開始	Start microphone
+■ マイクを停止	■ Stop microphone
+入力音声はスピーカーに返しません	Microphone audio is not sent to the speakers
+弾き直す	Retrigger
+全音を0に	Set all notes to zero
+＋ オクターブを追加	＋ Add octave
+マスター音量	Master volume
+表示対象	Display target
+音高周波数値	Pitch-frequency value
+調波極性(スカラー)	Harmonic polarity (scalar)
+調波極性ベクトル	Harmonic polarity vector
+調波特性ベクトル	Harmonic characteristic vector
+表示範囲	Display range
+オクターブ集計	Octave sum
+全周波数	Full frequency range
+1オクターブ	One octave
+端の音名	Left-edge pitch class
+1オクターブ下へ	One octave down
+1オクターブ上へ	One octave up
+解析グラフ	Analysis graph
+音声のスペクトル。入力を選んで解析を開始します。	Audio spectrum. Choose an input to start analysis.
+現在の上限で固定	Lock current upper limit
+解析・表示の設定	Analysis & display settings
+重み	Weights
+ノコギリ波型	Sawtooth-type
+矩形波型	Square-type
+倍音上限	Maximum harmonic index
+STFT窓	STFT window
+更新間隔	Update interval
+縦軸	Vertical axis
+自動	Automatic
+上限固定	Fixed upper limit
+上限	Upper limit
+極大点の偏角	Phase angles at peaks
+音源アタック	Synth attack
+リリース	Release
+入力を選ぶ	Choose an input
+MP3・WAV・M4A など	MP3, WAV, M4A and more
+マイクを使う	Use microphone
+音声をリアルタイム解析	Analyze live audio
+コード理論の裏側	Behind chord theory
+12音名の音量で和音をつくる	Build chords with 12 pitch-class sliders
+戻る	Back
+音色	Timbre
+サイン波	Sine
+三角波	Triangle
+ノコギリ波	Sawtooth
+矩形波	Square
+オルガン	Organ
+ストリングス	Strings
+ギター	Guitar
+ピアノ	Piano
+音源オクターブ	Synth octave
+このオクターブを削除	Remove this octave
+音量	Volume
+ の音量	 volume
+オクターブ 	Octave 
+ はすでに存在します。	 already exists.
+オクターブは0～8の整数にしてください。	The octave must be an integer from 0 to 8.
+再生中	Playing
+一時停止	Paused
+再生終了	Playback ended
+マイクを停止しました。	Microphone stopped.
+マイクが切断されました。	The microphone was disconnected.
+再生できませんでした：	Playback failed: 
+再生ボタンで開始します。	Select Play to start.
+音声を読み込んでいます…	Loading audio…
+音声を再生して解析できます。	Play the audio to analyze it.
+音声ファイルを選んでください。	Select an audio file.
+マイクへのアクセスを待っています…	Waiting for microphone access…
+マイク入力中 · スピーカー出力なし	Microphone active · No speaker monitoring
+マイクはHTTPSまたはlocalhostで開いてください。	Microphone input requires HTTPS or localhost.
+マイクの使用が許可されませんでした。ブラウザーの権限設定を確認してください。	Microphone access was denied. Check your browser permissions.
+この音声を読み込めませんでした。対応形式はブラウザーのコーデックに依存します。別のWAVまたはMP3でもお試しください。	Could not load this audio. Format support depends on your browser's codecs. Try another WAV or MP3 file.
+音量バーを動かして和音をつくります。	Move the volume sliders to build a chord.
+倍音上限は2～128の整数にしてください。	The maximum harmonic index must be an integer from 2 to 128.
+A4は300～500Hzにしてください。	A4 must be between 300 and 500 Hz.
+縦軸上限は正の有限値にしてください。	The vertical-axis limit must be a finite number greater than zero.
+解析Workerを開始できません：	Could not start the analysis worker: 
+解析処理でエラーが発生しました：	Analysis error: 
+入力を選んでください	Choose an input
+音声入力を待っています	Waiting for audio input
+線形二乗強度	Linear squared magnitude
+ ms 窓 · FFT刻み 	 ms window · FFT spacing 
+音声全体を解析しています…	Analyzing the whole audio…
+音声全体の解析に失敗しました：	Whole-audio analysis failed: 
+音声全体のSTFT平均 · 	Whole-audio STFT average · 
+ · 音声全体 STFT平均（	 · Whole-audio STFT average (
+フレーム）	 frames)
+フレーム	 frames
+。縦軸 	. Vertical axis 
+ ～ 	 to 
+P は音声の線形二乗強度。Π = Σ wₙ[P(nf) − P(f/n)]（n ≥ 2）。Z = P + iΠ。調波特性ベクトルは Zc = WP − (H+S)/2 + i√3(H−S)/2（H=ΣwₙP(nf)、S=ΣwₙP(f/n)、W=Σwₙ）。集計時は実部・虚部を合算してから絶対値と偏角を求めます。	P is the audio's linear squared magnitude. Π = Σ wₙ[P(nf) − P(f/n)] (n ≥ 2). Z = P + iΠ. The harmonic characteristic vector is Zc = WP − (H+S)/2 + i√3(H−S)/2, with H=ΣwₙP(nf), S=ΣwₙP(f/n), and W=Σwₙ. Octave summation adds real and imaginary components before calculating magnitude and phase.
+STFTはBlackman窓・8倍ゼロ埋め。ゼロ埋めは周波数の評価点を増やし、窓の分解能や時間幅は変えません。窓を長くすると周波数分解能が上がり、時間的な応答は遅くなります。マイクはHTTPSまたはlocalhostで使用してください。	STFT uses a Blackman window and 8× zero padding. Padding adds frequency evaluation points without changing the window's resolution or duration. Longer windows improve frequency resolution but slow the time response. Microphone input requires HTTPS or localhost.
