@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>基音の知覚・シミュレーター.web</title>
+<style>
+:root{color-scheme:dark;--bg:#080a0b;--panel:#111518;--line:#2b343a;--muted:#91a0aa;--ink:#edf2f4;--accent:#86dbc7}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif}button,input,select{font:inherit}button,select,input[type=number]{border:1px solid var(--line);border-radius:7px;background:#161c20;color:var(--ink);min-height:36px;padding:6px 12px}button{cursor:pointer}button:hover{background:#232e34;border-color:#677a83}button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}button:disabled{opacity:.4;cursor:default}button.active,button.primary{background:#173b33;border-color:#4d9986;color:#b7f6e5}input[type=range]{accent-color:var(--accent);cursor:pointer}label{display:inline-flex;align-items:center;gap:8px}header{padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}h1{margin:0;font-size:clamp(17px,2.2vw,23px);font-weight:600;letter-spacing:.025em}.header-actions,.row,.tabs{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.muted{color:var(--muted)}main{padding:16px 24px 20px;max-width:2000px;margin:auto}.source{padding:12px 14px;background:var(--panel);border:1px solid var(--line);border-radius:10px;margin-bottom:16px}.source-line{display:flex;align-items:center;gap:12px;flex-wrap:wrap}.source-line strong{font-size:13px;letter-spacing:.04em}#fileName{max-width:34vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#seek{flex:1;min-width:120px}#time{font-variant-numeric:tabular-nums;min-width:100px;font-size:12px}.volume{margin-left:auto;font-size:12px;color:var(--muted)}.volume input{width:100px}.toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}.tabs{gap:4px;border:1px solid var(--line);padding:4px;border-radius:9px}.tabs button{border-color:transparent;background:transparent}.tabs button.active{background:#203a35;color:#b7f6e5}.axis-controls{display:flex;align-items:center;flex-wrap:wrap;gap:8px}.axis-controls label{font-size:12px;color:var(--muted)}#octavePage{font-variant-numeric:tabular-nums;min-width:106px;text-align:center}#plotWrap{position:relative;border:1px solid #263036;border-radius:10px;overflow:hidden;background:#090d0f}#plot{width:100%;height:clamp(330px,56vh,780px);display:block;touch-action:pan-y}.plot-foot{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;gap:12px;border-top:1px solid #1c252b;color:var(--muted);font-size:12px}.legend{display:flex;align-items:center;gap:7px}.gradient{width:92px;height:5px;border-radius:3px;background:linear-gradient(90deg,#5555ff,#55ff55,#ff5555)}#readout{font-variant-numeric:tabular-nums;min-height:18px}.chord-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:12px}.notes{display:grid;grid-template-columns:repeat(12,minmax(44px,1fr));gap:8px}.note{padding:10px 3px;background:#0a1013;border:1px solid #263239;border-radius:8px;display:flex;flex-direction:column;align-items:center;gap:6px}.note.black{background:#080a0c}.note.on{border-color:#4b9b84;background:#10241e}.note b{font-size:13px}.note input[type=range]{writing-mode:vertical-lr;direction:rtl;width:28px;height:104px}.note output{font-size:11px;color:var(--muted);font-variant-numeric:tabular-nums}.settings{margin-top:12px;border:1px solid var(--line);border-radius:8px}.settings summary{padding:10px 14px;cursor:pointer;color:#b2bfc6}.settings-grid{display:flex;flex-wrap:wrap;gap:14px 22px;padding:4px 14px 16px}.settings-grid label{font-size:12px}.settings-grid input[type=number]{width:96px}.settings-grid select{max-width:210px}.settings-grid .small{width:80px}.info{padding:0 14px 12px;color:var(--muted);font-size:12px}#status{font-size:12px;color:var(--muted);min-height:24px;padding:10px 1px 0}#status.error{color:#ffb8a8}dialog{color:var(--ink);background:#0e1418;border:1px solid #39494f;border-radius:16px;padding:28px;width:min(850px,calc(100% - 32px));box-shadow:0 24px 100px #000b}dialog::backdrop{background:#020405e8}dialog h2{margin:0 0 22px;font-size:22px;font-weight:500}.modes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.mode-card{text-align:left;min-height:160px;padding:22px;display:flex;flex-direction:column;justify-content:space-between;border-radius:12px}.mode-card .icon{font-size:24px;color:var(--accent)}.mode-card b{font-size:16px}.mode-card span:last-child{font-size:12px;color:var(--muted)}.dialog-footer{display:flex;justify-content:flex-end;margin-top:18px}.badge{font-size:11px;padding:2px 8px;border:1px solid var(--line);border-radius:20px;color:var(--muted)}[hidden]{display:none!important}@media(max-width:760px){header{padding:14px 12px;align-items:flex-start}main{padding:12px}.source-line{gap:8px}.volume{margin-left:0}#fileName{max-width:55vw}.modes{grid-template-columns:1fr}.mode-card{min-height:94px;padding:14px;gap:3px}.mode-card .icon{display:none}.notes{gap:4px}.note{padding:8px 0}.note input[type=range]{height:86px}.note b{font-size:11px}.tabs{width:100%}.tabs button{flex:1;padding:6px 4px;font-size:12px}.plot-foot{align-items:flex-start;flex-direction:column}#plot{height:49vh;min-height:300px}.header-actions{justify-content:flex-end}.badge{display:none}}
+/* Keep the entire plot visible on typical laptop screens. */
+#plot{height:clamp(260px,calc(100dvh - 300px),780px);min-height:260px}body[data-mode=chord] #plot{height:clamp(260px,calc(100dvh - 450px),780px)}.note input[type=range]{height:72px}
+@media(max-width:760px){.notes{grid-template-columns:repeat(12,minmax(22px,1fr))}.note input[type=range]{height:64px;width:22px}.chord-controls{gap:6px}.note b{font-size:10px}}
+#octaveBanks{max-height:max(260px,43vh);overflow-y:auto;scrollbar-gutter:stable}.octave-bank{padding:12px;border:1px solid var(--line);border-radius:10px;background:#0d1215}.octave-bank + .octave-bank{margin-top:12px}.bank-error{color:#ffb8a8;font-size:12px}.bank-error:not(:empty){margin-bottom:8px}
+</style></head><body>
+<header><h1>基音の知覚・シミュレーター.web</h1><div class="header-actions"><span class="badge">v1.0.5</span><button id="changeMode">入力を変更</button></div></header>
+<main>
+<section class="source" aria-label="音声入力">
+<div id="filePanel" hidden class="source-line"><button id="pickFile">音声を開く</button><span id="fileName" class="muted">未選択</span><button id="filePlay" disabled>▶ 再生</button><input id="seek" type="range" min="0" max="1" step="0.01" value="0" aria-label="再生位置" disabled><span id="time">0:00 / 0:00</span><label>解析範囲 <select id="fileScope"><option value="current">現在位置</option><option value="whole">音声全体（STFT平均）</option></select></label></div>
+<div id="micPanel" hidden class="source-line"><strong>マイク入力</strong><button id="micToggle">マイクを開始</button><span class="muted">入力音声はスピーカーに返しません</span></div>
+<div id="chordPanel" hidden><div class="chord-controls"><button id="chordPlay">■ 停止</button><button id="chordStrike">弾き直す</button><button id="chordClear">全音を0に</button></div><div id="octaveBanks"></div><button id="addOctave" type="button" style="margin-top:10px">＋ オクターブを追加</button></div>
+<div id="outputControls" hidden class="row" style="margin-top:10px"><label class="volume">マスター音量 <input id="volume" type="range" min="0" max="1" step="0.01" value="0.5"></label></div>
+</section>
+<div class="toolbar"><div class="tabs" role="group" aria-label="表示対象"><button class="active" data-view="power" aria-pressed="true">音高周波数値</button><button data-view="term" aria-pressed="false">調波極性(スカラー)</button><button data-view="vector" aria-pressed="false">調波極性ベクトル</button><button data-view="characteristic" aria-pressed="false">調波特性ベクトル</button></div><div class="axis-controls"><select id="axis" aria-label="表示範囲"><option value="fold">オクターブ集計</option><option value="full">全周波数</option><option value="octave">1オクターブ</option></select><label>端の音名 <select id="edge"></select></label><div id="pager" class="row" hidden><button id="prevOct" aria-label="1オクターブ下へ">←</button><span id="octavePage"></span><button id="nextOct" aria-label="1オクターブ上へ">→</button></div></div></div>
+<section id="plotWrap" aria-label="解析グラフ"><canvas id="plot" role="img" aria-label="音声のスペクトル。入力を選んで解析を開始します。"></canvas><div class="plot-foot"><span id="readout">—</span><span id="legend" class="legend" hidden><span>−90°</span><span class="gradient"></span><span>+90°</span></span><button id="freeze">現在の上限で固定</button></div></section>
+<details class="settings"><summary>解析・表示の設定</summary><div class="settings-grid">
+<label>重み <select id="weight"><option value="saw">ノコギリ波型</option><option value="square">矩形波型</option></select></label>
+<label>倍音上限 <input id="harmonics" type="number" min="2" max="128" value="32"></label>
+<label>STFT窓 <select id="fft"><option value="4096">4096 samples</option><option value="8192" selected>8192 samples</option><option value="16384">16384 samples</option><option value="32768">32768 samples</option></select></label>
+<label>更新間隔 <select id="interval"><option value="33" selected>33 ms</option><option value="50">50 ms</option><option value="100">100 ms</option></select></label>
+<label>A4 <input id="a4" type="number" min="300" max="500" step="0.1" value="440">Hz</label>
+<label>縦軸 <select id="yMode"><option value="auto">自動</option><option value="fixed">上限固定</option></select></label><label>上限 <input id="yMax" type="number" min="0" step="any" value="0.0001" disabled></label>
+<label><input id="angles" type="checkbox" checked>極大点の偏角</label>
+<label>音源アタック <input id="attack" type="number" min="0" max="500" value="8">ms</label><label>リリース <input id="release" type="number" min="20" max="5000" value="240">ms</label>
+</div><div class="info">P は音声の線形二乗強度。Π = Σ wₙ[P(nf) − P(f/n)]（n ≥ 2）。Z = P + iΠ。調波特性ベクトルは Zc = WP − (H+S)/2 + i√3(H−S)/2（H=ΣwₙP(nf)、S=ΣwₙP(f/n)、W=Σwₙ）。集計時は実部・虚部を合算してから絶対値と偏角を求めます。<br>STFTはBlackman窓・8倍ゼロ埋め。ゼロ埋めは周波数の評価点を増やし、窓の分解能や時間幅は変えません。窓を長くすると周波数分解能が上がり、時間的な応答は遅くなります。マイクはHTTPSまたはlocalhostで使用してください。</div></details>
+<div id="status" role="status" aria-live="polite"></div>
+</main>
+<dialog id="modeDialog" aria-labelledby="modeTitle"><h2 id="modeTitle">入力を選ぶ</h2><div class="modes"><button class="mode-card" data-mode="file"><span class="icon">↗</span><b>音声を開く</b><span>MP3・WAV・M4A など</span></button><button class="mode-card" data-mode="mic"><span class="icon">◉</span><b>マイクを使う</b><span>音声をリアルタイム解析</span></button><button class="mode-card" data-mode="chord"><span class="icon">♮</span><b>コード理論の裏側</b><span>12音名の音量で和音をつくる</span></button></div><div class="dialog-footer"><button id="cancelMode" hidden>戻る</button></div></dialog>
+<input type="file" id="fileInput" accept="audio/*,.mp3,.wav,.m4a,.aac,.ogg,.flac" hidden><audio id="media" preload="metadata"></audio>
+<script>
+function audioPower(samples,sampleRate,padding=8){
+  const n=samples.length,size=n*padding;
+  if(n<2||(n&(n-1))||padding<1||(padding&(padding-1)))throw Error('FFT sizes must be powers of two.');
+  let cache=audioPower.cache;
+  if(!cache||cache.size!==size||cache.n!==n){
+    const reverse=new Uint32Array(size),window=new Float64Array(n),cos=new Float64Array(size/2),sin=new Float64Array(size/2);
+    for(let i=1;i<size;i++)reverse[i]=(reverse[i>>1]>>1)|((i&1)?size>>1:0);
+    for(let i=0;i<n;i++)window[i]=.42-.5*Math.cos(2*Math.PI*i/n)+.08*Math.cos(4*Math.PI*i/n);
+    for(let i=0;i<size/2;i++){cos[i]=Math.cos(-2*Math.PI*i/size);sin[i]=Math.sin(-2*Math.PI*i/size);}
+    cache=audioPower.cache={n,size,reverse,window,cos,sin,re:new Float64Array(size),im:new Float64Array(size)};
+  }
+  const {re,im,reverse,window,cos,sin}=cache;re.fill(0);im.fill(0);
+  for(let i=0;i<n;i++)re[reverse[i]]=samples[i]*window[i];
+  for(let length=2;length<=size;length*=2){
+    const half=length/2,stride=size/length;
+    for(let start=0;start<size;start+=length)for(let j=0;j<half;j++){
+      const a=start+j,b=a+half,k=j*stride,vr=re[b]*cos[k]-im[b]*sin[k],vi=re[b]*sin[k]+im[b]*cos[k];
+      re[b]=re[a]-vr;im[b]=im[a]-vi;re[a]+=vr;im[a]+=vi;
+    }
+  }
+  const power=new Float64Array(size/2);
+  // Normalize by the actual observation length, not padded FFT length.
+  for(let i=1;i<power.length;i++)power[i]=(re[i]*re[i]+im[i]*im[i])/(n*n);
+  return {power,df:sampleRate/size};
+}
+function analyse(power,df,o){
+  const root=o.a4*2**((-57+o.edge)/12),last=power.length-1;
+  const onlyP=o.view==='power',characteristic=o.view==='characteristic',extent=onlyP?1:o.N;
+  let W=0;for(let n=2;n<=o.N;n++)if(o.weight!=='square'||n%2)W+=1/n;
+  const low=o.axis==='octave'?o.octave:Math.log2(df/extent/root);
+  const high=o.axis==='octave'?o.octave+1:Math.log2(last*df*extent/root);
+  const folded=o.axis==='fold',xs=new Set();
+  const size=folded?1536:Math.min(8192,Math.max(1536,Math.ceil((high-low)*512)));
+  for(let j=0;j<=size;j++)xs.add(folded?j/size:low+(high-low)*j/size);
+  let peak=0;for(let i=1;i<power.length;i++)peak=Math.max(peak,power[i]);
+  const peaks=[];
+  for(let i=1;i<last;i++)if(power[i]>power[i-1]&&power[i]>=power[i+1]&&power[i]>Math.max(1e-22,peak*1e-6))peaks.push(i);
+  peaks.sort((a,b)=>power[b]-power[a]);
+  const add=t=>{if(t>=low&&t<=high)xs.add(folded?((t%1)+1)%1:t)};
+  for(const i of peaks.slice(0,64)){
+    const t=Math.log2(i*df/root);add(t);
+    if(!onlyP)for(let n=2;n<=o.N;n++)if(o.weight!=='square'||n%2){add(t-Math.log2(n));add(t+Math.log2(n));}
+  }
+  const x=Float64Array.from([...xs].sort((a,b)=>a-b)),re=new Float64Array(x.length),im=new Float64Array(x.length);
+  function sample(f){const a=f/df;if(a<1||a>last)return 0;const i=Math.floor(a),t=a-i;return power[i]*(1-t)+power[Math.min(i+1,last)]*t;}
+  for(let j=0;j<x.length;j++){
+    const h=folded&&x[j]===1?0:x[j];
+    const from=folded?Math.ceil(low-h-1e-12):0,to=folded?Math.ceil(high-h-1e-12):1;
+    let p=0,v=0,total=0;
+    for(let k=from;k<to;k++){
+      const f=root*2**(h+k);p+=sample(f);
+      if(!onlyP)for(let n=2;n<=o.N;n++)if(o.weight!=='square'||n%2){
+        const H=sample(f*n)/n,S=sample(f/n)/n;v+=H-S;if(characteristic)total+=H+S;
+      }
+    }
+    re[j]=characteristic?W*p-total/2:p;im[j]=characteristic?Math.sqrt(3)/2*v:v;
+  }
+  return {x,re,im,lo:folded?0:low,hi:folded?1:high,root,options:o};
+}
+function peakIndices(y,circular){
+  const n=y.length-(circular?1:0),out=[];if(n<2)return out;
+  let start=0;if(circular){while(start<n&&y[start]===y[(start+n-1)%n])start++;if(start===n)return out;}
+  for(let at=0;at<n;){const a=at,i=(start+a)%n;let end=a+1;while(end<n&&y[(start+end)%n]===y[i])end++;
+    const prev=circular||a>0?y[(i+n-1)%n]:Infinity,last=(start+end-1)%n,next=circular||end<n?y[(last+1)%n]:Infinity;
+    if(y[i]>prev&&y[i]>next)out.push((start+Math.floor((a+end-1)/2))%n);at=end;
+  }return out;
+}
+function phaseColor(p,v){return p===0&&v===0?'#78858c':`hsl(${120-Math.atan2(v,p)*240/Math.PI} 80% 65%)`;}
+
+function characteristicColor(p,v){return p===0&&v===0?'#78858c':`hsl(${((120-Math.atan2(v,p)*180/Math.PI)%360+360)%360} 80% 65%)`;}
+
+function averagePower(samples,sampleRate,n,progress=()=>{}){
+  const hop=n/2,count=Math.max(1,Math.ceil(samples.length/hop));
+  const window=new Float32Array(n),sum=new Float64Array(n*4);
+  for(let j=0;j<count;j++){
+    window.fill(0);const start=j*hop-n/2,lo=Math.max(0,start),hi=Math.min(samples.length,start+n);
+    if(hi>lo)window.set(samples.subarray(lo,hi),lo-start);
+    const {power}=audioPower(window,sampleRate);
+    for(let i=0;i<sum.length;i++)sum[i]+=power[i]/count;
+    if(j%16===0)progress((j+1)/count);
+  }
+  return {power:sum,df:sampleRate/(n*8),count};
+}
+
+function connectOscillator(bus,sources,now,freq,type="sine",level=1,harmonic=1){
+  const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+  osc.type=type;
+  osc._amtHarmonic=harmonic;
+  osc.frequency.setValueAtTime(freq*harmonic,now);
+  gain.gain.setValueAtTime(level,now);
+  osc.connect(gain);gain.connect(bus);osc.start(now);
+  sources.push(osc);
+  return osc;
+}
+function addNoiseTransient(bus,sources,now,duration=.035,level=.06){
+  const count=Math.max(1,Math.floor(audioCtx.sampleRate*duration));
+  const buffer=audioCtx.createBuffer(1,count,audioCtx.sampleRate);
+  const data=buffer.getChannelData(0);
+  const fadeIn=Math.max(1,Math.min(count,Math.floor(audioCtx.sampleRate*.0015)));
+  const fadeOut=Math.max(1,Math.min(count,Math.floor(audioCtx.sampleRate*.008)));
+  for(let i=0;i<count;i++){
+    const decay=Math.exp(-7*i/count);
+    const inGain=i<fadeIn?Math.sin((i/fadeIn)*Math.PI/2):1;
+    const remaining=count-1-i;
+    const outGain=remaining<fadeOut?Math.sin((remaining/fadeOut)*Math.PI/2):1;
+    data[i]=(Math.random()*2-1)*decay*inGain*outGain;
+  }
+  // バッファの最終サンプルを厳密に0にして、BufferSource自然終了時の段差を除く。
+  data[count-1]=0;
+  const src=audioCtx.createBufferSource(), gain=audioCtx.createGain();
+  src.buffer=buffer;gain.gain.setValueAtTime(level,now);
+  src.connect(gain);gain.connect(bus);src.start(now);sources.push(src);
+}
+function buildVoice(freq,timbre,now){
+  const sources=[];
+  const sourceBus=audioCtx.createGain();
+  const amp=audioCtx.createGain();
+  // ampはアタック／音色固有の減衰専用。
+  // キーリリースは別のreleaseGateで行い、進行中のamp自動化を中断しない。
+  const releaseGate=audioCtx.createGain();
+  const userAttack=Math.max(.001,Number($("attack").value)/1000);
+  const userRelease=Math.max(.01,Number($("release").value)/1000);
+  let attack=userAttack,release=userRelease,peak=.16,sustain=.16,decayTime=0;
+  let outputNode=sourceBus;
+
+  const addFilter=(type,frequency,q=.7)=>{
+    const filter=audioCtx.createBiquadFilter();
+    filter.type=type;filter.frequency.setValueAtTime(frequency,now);filter.Q.setValueAtTime(q,now);
+    sourceBus.connect(filter);outputNode=filter;
+  };
+
+  switch(timbre){
+    case "organ":
+      connectOscillator(sourceBus,sources,now,freq,"sine",1.00,1);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.42,2);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.23,3);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.12,4);
+      attack=Math.max(userAttack,.018);release=Math.max(userRelease,.22);peak=.105;sustain=.105;
+      break;
+    case "strings":
+      connectOscillator(sourceBus,sources,now,freq,"sawtooth",.45,1);
+      connectOscillator(sourceBus,sources,now,freq,"triangle",.42,1);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.16,2);
+      addFilter("lowpass",Math.min(5200,Math.max(1450,freq*10)),.8);
+      attack=Math.max(userAttack,.16);release=Math.max(userRelease,.85);peak=.105;sustain=.09;decayTime=.8;
+      break;
+    case "guitar":
+      connectOscillator(sourceBus,sources,now,freq,"triangle",.82,1);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.34,2);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.18,3);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.09,4);
+      addNoiseTransient(sourceBus,sources,now,.025,.035);
+      addFilter("lowpass",Math.min(6200,Math.max(1800,freq*13)),.7);
+      attack=Math.max(userAttack,.004);release=Math.max(userRelease,.38);peak=.18;sustain=.018;decayTime=.46;
+      break;
+    case "piano":
+      connectOscillator(sourceBus,sources,now,freq,"sine",1.00,1);
+      connectOscillator(sourceBus,sources,now,freq,"triangle",.30,2);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.17,3);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.08,4);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.035,6);
+      addNoiseTransient(sourceBus,sources,now,.018,.028);
+      addFilter("lowpass",Math.min(7600,Math.max(2200,freq*16)),.65);
+      attack=Math.max(userAttack,.003);release=Math.max(userRelease,.52);peak=.17;sustain=.022;decayTime=.68;
+      break;
+    default:
+      connectOscillator(sourceBus,sources,now,freq,["sine","triangle","sawtooth","square"].includes(timbre)?timbre:"triangle",1,1);
+      peak=.16;sustain=.16;
+  }
+
+  outputNode.connect(amp);
+  amp.connect(releaseGate);
+  releaseGate.connect(masterGain);
+  releaseGate.gain.setValueAtTime(1,now);
+  amp.gain.setValueAtTime(.0001,now);
+  amp.gain.exponentialRampToValueAtTime(peak,now+attack);
+  if(decayTime>0) amp.gain.setTargetAtTime(sustain,now+attack,decayTime);
+  return {sources,sourceBus,outputNode,amp,releaseGate,release,timbre,frequency:freq};
+}
+function releaseVoice(v){
+  if(!v||!audioCtx)return;
+  const now=audioCtx.currentTime,rel=Math.max(.06,v.release);
+  const gate=v.releaseGate.gain;
+  gate.cancelScheduledValues(now);
+  gate.setValueAtTime(Math.max(1e-5,gate.value||1),now);
+  gate.exponentialRampToValueAtTime(1e-5,now+rel);
+  const stopAt=now+rel+.04;
+  v.sources.forEach(source=>{try{source.stop(stopAt)}catch{}});
+  window.setTimeout(()=>{
+    const nodes=new Set([v.sourceBus,v.outputNode,v.amp,v.releaseGate,...v.sources]);
+    nodes.forEach(node=>{try{node?.disconnect()}catch{}});
+  },Math.ceil((rel+.14)*1000));
+}
+
+'use strict';
+const $=id=>document.getElementById(id),names=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+let audioCtx=null,masterGain=null,programGain=null,limiter=null,analyser=null,mediaNode=null,micNode=null,stream=null;
+let mode=null,view='power',octave=4,micTicket=0,fileURL=null;
+const voices=new Map(),retiringVoices=new Set(),media=$('media');
+const banks=[];let nextBankId=1,chordPlaying=true;
+let worker=null,workerURL=null,pending=false,generation=0,timer=0,frame=null,lastBounds=null,dirty=true,raf=0,hover=null;
+let fftData=null,computeMs=0,drawMs=0;
+let selectedFile=null,decodedFile=null,decodePromise=null,fileRevision=0,wholeWorker=null,wholeURL=null,wholeBusy=false,wholeCache=null;
+function cancelWhole(){if(wholeWorker)wholeWorker.terminate();wholeWorker=null;if(wholeURL)URL.revokeObjectURL(wholeURL);wholeURL=null;wholeBusy=false;}
+async function decodeFile(){
+  if(decodedFile)return decodedFile;if(decodePromise)return decodePromise;
+  const file=selectedFile,revision=fileRevision;if(!file)throw Error('音声ファイルを選んでください。');
+  const promise=(async()=>{
+    await audioSetup();const decoded=await audioCtx.decodeAudioData(await file.arrayBuffer());
+    const mono=new Float32Array(decoded.length);
+    for(let c=0;c<decoded.numberOfChannels;c++){const channel=decoded.getChannelData(c);for(let i=0;i<mono.length;i++)mono[i]+=channel[i]/decoded.numberOfChannels;}
+    const result={samples:mono,sampleRate:decoded.sampleRate};if(revision===fileRevision)decodedFile=result;return result;
+  })();decodePromise=promise;
+  try{return await promise;}finally{if(decodePromise===promise)decodePromise=null;}
+}
+async function analyseWhole(){
+  if(wholeBusy||frame||!selectedFile)return;
+  wholeBusy=true;const ticket=generation,revision=fileRevision;
+  try{
+    const opts=options(),n=Number($('fft').value),gain=Number($('volume').value);
+    status('音声全体を解析しています…');const decoded=await decodeFile();
+    if(ticket!==generation||revision!==fileRevision)return;
+    const cached=wholeCache?.n===n?wholeCache:null;
+    const source=audioPower.toString()+'\n'+averagePower.toString()+'\n'+analyse.toString()+`;
+      onmessage=e=>{try{const d=e.data;let avg=d.cached;
+        if(!avg)avg=averagePower(d.samples,d.sampleRate,d.n,p=>postMessage({progress:p}));
+        const result=analyse(Float64Array.from(avg.power,v=>v*d.gain*d.gain),avg.df,d.opts);
+        result.windowMs=d.n/d.sampleRate*1000;result.df=avg.df;result.whole=true;result.count=avg.count;
+        postMessage({result,average:avg},[result.x.buffer,result.re.buffer,result.im.buffer,avg.power.buffer]);
+      }catch(e){postMessage({error:e.message});}}`;
+    wholeURL=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));wholeWorker=new Worker(wholeURL);
+    wholeWorker.onmessage=e=>{
+      if(ticket!==generation)return;
+      if(e.data.progress!==undefined){status('音声全体を解析しています… '+Math.round(e.data.progress*100)+'%');return;}
+      if(e.data.error){status('音声全体の解析に失敗しました：'+e.data.error,true);cancelWhole();return;}
+      wholeCache={...e.data.average,n};frame=e.data.result;dirty=true;status('音声全体のSTFT平均 · '+frame.count+'フレーム');cancelWhole();
+    };
+    wholeWorker.onerror=e=>{if(ticket===generation){status('音声全体の解析に失敗しました：'+e.message,true);cancelWhole();}};
+    wholeWorker.postMessage({samples:cached?null:decoded.samples,sampleRate:decoded.sampleRate,n,opts,gain,cached});
+  }catch(e){if(ticket===generation){status('音声全体の解析に失敗しました：'+e.message,true);cancelWhole();}}
+}
+
+function status(text,error=false){$('status').textContent=text;$('status').classList.toggle('error',error);}
+function audioSetup(){
+  if(!audioCtx){
+    audioCtx=new (window.AudioContext||window.webkitAudioContext)({latencyHint:'interactive'});
+    analyser=audioCtx.createAnalyser();analyser.smoothingTimeConstant=0;analyser.fftSize=Number($('fft').value);
+    programGain=audioCtx.createGain();programGain.gain.value=Number($('volume').value);
+    programGain.connect(audioCtx.destination);programGain.connect(analyser);
+    masterGain=audioCtx.createGain();masterGain.gain.value=1;
+    limiter=audioCtx.createDynamicsCompressor();limiter.threshold.value=-7;limiter.knee.value=12;limiter.ratio.value=10;limiter.attack.value=.003;limiter.release.value=.16;
+    masterGain.connect(limiter);limiter.connect(programGain);
+    mediaNode=audioCtx.createMediaElementSource(media);mediaNode.connect(programGain);
+  }
+  if(audioCtx.state==='suspended')return audioCtx.resume();
+  return Promise.resolve();
+}
+function killVoices(bank=null){
+  const stop=({voice,gain})=>{
+    for(const source of voice.sources){try{source.stop()}catch{}try{source.disconnect()}catch{}}
+    for(const node of [voice.sourceBus,voice.outputNode,voice.amp,voice.releaseGate,gain])try{node.disconnect()}catch{}
+  };
+  for(const [key,entry] of voices)if(!bank||entry.bankId===bank.id){stop(entry);voices.delete(key);}
+  for(const entry of retiringVoices)if(!bank||entry.bankId===bank.id){stop(entry);retiringVoices.delete(entry);}
+}
+function setNote(bank,i){
+  const key=bank.id+':'+i,existing=voices.get(key);
+  if(!audioCtx||mode!=='chord'||!chordPlaying||!banks.includes(bank))return;
+  if(bank.levels[i]===0){if(existing){releaseVoice(existing.voice);voices.delete(key);retiringVoices.add(existing);setTimeout(()=>{existing.gain.disconnect();retiringVoices.delete(existing);},(existing.voice.release+.2)*1000);}return;}
+  const level=bank.levels[i]*bank.volume;
+  if(existing){existing.gain.gain.setTargetAtTime(level,audioCtx.currentTime,.012);return;}
+  const freq=Number($('a4').value)*2**(((bank.octave+1)*12+i-69)/12);
+  const voice=buildVoice(freq,bank.timbre,audioCtx.currentTime),gain=audioCtx.createGain();
+  gain.gain.value=level;voice.releaseGate.disconnect(masterGain);voice.releaseGate.connect(gain);gain.connect(masterGain);voices.set(key,{voice,gain,bankId:bank.id});
+}
+function rebuildChord(bank=null){killVoices(bank);if(mode==='chord'&&chordPlaying)for(const b of bank?[bank]:banks)for(let i=0;i<12;i++)setNote(b,i);}
+function unusedOctave(after=3){
+  for(let step=1;step<=9;step++){const n=(after+step)%9;if(!banks.some(b=>b.octave===n))return n;}
+  return null;
+}
+function changeBankOctave(bank,raw){
+  const n=Number(raw);
+  if(String(raw).trim()===''||!Number.isInteger(n)||n<0||n>8)return 'オクターブは0～8の整数にしてください。';
+  if(banks.some(b=>b!==bank&&b.octave===n))return 'オクターブ '+n+' はすでに存在します。';
+  bank.octave=n;return '';
+}
+function refreshBankControls(){
+  $('addOctave').disabled=banks.length>=9;
+  for(const b of banks){b.element.querySelector('.remove-bank').disabled=banks.length===1;b.element.setAttribute('aria-label','オクターブ '+b.octave);for(let i=0;i<12;i++)b.element.querySelectorAll('.notes input')[i].setAttribute('aria-label',names[i]+b.octave+' の音量');}
+}
+function addBank(){
+  const source=banks.at(-1),oct=unusedOctave(source?source.octave:3);if(oct===null)return;
+  const bank={id:nextBankId++,octave:oct,timbre:source?.timbre||'sine',volume:source?.volume??1,levels:source?Float64Array.from(source.levels):new Float64Array(12)};
+  const el=document.createElement('section');bank.element=el;el.className='octave-bank';el.dataset.bank=bank.id;
+  el.innerHTML=`<div class="chord-controls"><strong>コード理論の裏側</strong><select class="bank-timbre" aria-label="音色"><option value="sine">サイン波</option><option value="triangle">三角波</option><option value="sawtooth">ノコギリ波</option><option value="square">矩形波</option><option value="organ">オルガン</option><option value="strings">ストリングス</option><option value="guitar">ギター</option><option value="piano">ピアノ</option></select><label>音源オクターブ <input class="bank-octave" type="number" min="0" max="8" step="1" style="width:64px"></label><button class="remove-bank" style="margin-left:auto" aria-label="このオクターブを削除">×</button></div><div class="bank-error" role="status"></div><div class="notes"></div><div class="row" style="margin-top:10px"><label class="volume">音量 <input class="bank-volume" type="range" min="0" max="1" step="0.01"></label></div>`;
+  const find=s=>el.querySelector(s),error=find('.bank-error');
+  find('.bank-timbre').value=bank.timbre;find('.bank-octave').value=oct;find('.bank-volume').value=bank.volume;
+  for(let i=0;i<12;i++){
+    const note=document.createElement('label');note.className='note'+([1,3,6,8,10].includes(i)?' black':'');note.classList.toggle('on',bank.levels[i]>0);
+    const value=Math.round(bank.levels[i]*100);note.innerHTML=`<b>${names[i]}</b><input type="range" min="0" max="100" step="1" value="${value}"><output>${value}</output>`;
+    note.querySelector('input').oninput=async e=>{bank.levels[i]=Number(e.target.value)/100;note.querySelector('output').textContent=e.target.value;note.classList.toggle('on',bank.levels[i]>0);try{await audioSetup();setNote(bank,i);}catch(err){status(err.message,true);}};
+    find('.notes').append(note);
+  }
+  const commitOctave=e=>{const previous=bank.octave,message=changeBankOctave(bank,e.target.value);e.target.value=bank.octave;if(message)error.textContent=message;else if(previous!==bank.octave){error.textContent='';refreshBankControls();rebuildChord(bank);}};
+  find('.bank-octave').onchange=commitOctave;
+  find('.bank-octave').onblur=commitOctave;
+  find('.bank-timbre').onchange=e=>{bank.timbre=e.target.value;rebuildChord(bank);};
+  find('.bank-volume').oninput=e=>{bank.volume=Number(e.target.value);for(let i=0;i<12;i++)setNote(bank,i);};
+  find('.remove-bank').onclick=()=>{if(banks.length===1)return;killVoices(bank);banks.splice(banks.indexOf(bank),1);el.remove();refreshBankControls();};
+  banks.push(bank);$('octaveBanks').append(el);refreshBankControls();rebuildChord(bank);
+  if(source)el.scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+function stopMic(){
+  micTicket++;if(stream){for(const t of stream.getTracks())t.stop();stream=null;}
+  if(micNode){micNode.disconnect();micNode=null;}$('micToggle').textContent='マイクを開始';
+}
+async function startMic(){
+  const ticket=++micTicket;
+  $('micToggle').disabled=true;status('マイクへのアクセスを待っています…');
+  try{
+    if(!navigator.mediaDevices?.getUserMedia)throw Error('マイクはHTTPSまたはlocalhostで開いてください。');
+    await audioSetup();
+    const incoming=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:false,noiseSuppression:false,autoGainControl:false},video:false});
+    if(ticket!==micTicket||mode!=='mic'){incoming.getTracks().forEach(t=>t.stop());return;}
+    stream=incoming;micNode=audioCtx.createMediaStreamSource(stream);micNode.connect(analyser);
+    stream.getAudioTracks().forEach(t=>t.addEventListener('ended',()=>{if(stream===incoming){stopMic();resetAnalysis();status('マイクが切断されました。');}}));
+    $('micToggle').textContent='■ マイクを停止';status('マイク入力中 · スピーカー出力なし');restartAnalysis();
+  }catch(e){if(ticket===micTicket)status(e.name==='NotAllowedError'?'マイクの使用が許可されませんでした。ブラウザーの権限設定を確認してください。':e.message,true);}
+  finally{if(ticket===micTicket)$('micToggle').disabled=false;}
+}
+async function chooseMode(next){
+  if(mode!==next){media.pause();stopMic();killVoices();mode=next;resetAnalysis();}
+  document.body.dataset.mode=mode;
+  if(masterGain)masterGain.gain.value=mode==='chord'?1:0;
+  for(const key of ['file','mic','chord'])$(key+'Panel').hidden=mode!==key;
+  $('outputControls').hidden=mode==='mic';$('cancelMode').hidden=false;$('modeDialog').close();
+  $('micToggle').disabled=false;
+  if(mode==='file'){
+    status(media.src?'音声を再生して解析できます。':'音声ファイルを選んでください。');
+    if(!fileURL)$('fileInput').click();
+  }else if(mode==='mic'){if(!stream)await startMic();}
+  else{try{await audioSetup();masterGain.gain.value=1;rebuildChord();status('音量バーを動かして和音をつくります。');restartAnalysis();}catch(e){status(e.message,true);}}
+  restartAnalysis();
+}
+for(let i=0;i<12;i++){
+  const opt=document.createElement('option');opt.value=i;opt.textContent=names[i];$('edge').append(opt);
+}
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>chooseMode(b.dataset.mode));
+$('changeMode').onclick=()=>{$('modeDialog').showModal();};
+$('cancelMode').onclick=()=>{$('modeDialog').close();restartAnalysis();};
+$('modeDialog').addEventListener('cancel',e=>{if(!mode)e.preventDefault();});
+$('modeDialog').addEventListener('close',()=>restartAnalysis());
+$('pickFile').onclick=()=>$('fileInput').click();
+$('fileInput').onchange=async e=>{
+  const file=e.target.files[0];if(!file)return;
+  selectedFile=file;fileRevision++;decodedFile=null;decodePromise=null;wholeCache=null;
+  media.pause();if(fileURL)URL.revokeObjectURL(fileURL);fileURL=URL.createObjectURL(file);media.src=fileURL;
+  $('fileName').textContent=file.name;$('fileName').title=file.name;$('filePlay').disabled=true;$('seek').disabled=true;
+  resetAnalysis();status('音声を読み込んでいます…');media.load();e.target.value='';restartAnalysis();
+};
+media.addEventListener('loadedmetadata',()=>{
+  $('filePlay').disabled=false;$('seek').disabled=!Number.isFinite(media.duration);$('seek').max=Number.isFinite(media.duration)?media.duration:1;
+  updateTransport();status('再生ボタンで開始します。');
+});
+media.addEventListener('error',()=>{status('この音声を読み込めませんでした。対応形式はブラウザーのコーデックに依存します。別のWAVまたはMP3でもお試しください。',true);$('filePlay').disabled=true;});
+media.addEventListener('play',()=>{$('filePlay').textContent='Ⅱ 一時停止';if(mode==='file')status('再生中');restartAnalysis();});
+media.addEventListener('pause',()=>{$('filePlay').textContent='▶ 再生';updateTransport();if(mode==='file')status('一時停止');});
+media.addEventListener('ended',()=>{$('filePlay').textContent='▶ 再生';updateTransport();if(mode==='file')status('再生終了');});
+media.addEventListener('timeupdate',updateTransport);
+function timeLabel(v){if(!Number.isFinite(v))return '—';const s=Math.floor(v);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0');}
+function updateTransport(){if(!$('seek').matches(':active'))$('seek').value=media.currentTime;$('time').textContent=timeLabel(media.currentTime)+' / '+timeLabel(media.duration);}
+$('filePlay').onclick=async()=>{try{await audioSetup();if(media.paused)await media.play();else media.pause();}catch(e){status('再生できませんでした：'+e.message,true);}};
+$('seek').oninput=e=>{if(Number.isFinite(media.duration)){media.currentTime=Number(e.target.value);if($('fileScope').value!=='whole')resetAnalysis();updateTransport();}};
+$('micToggle').onclick=()=>{if(stream){stopMic();resetAnalysis();status('マイクを停止しました。');}else startMic();};
+$('chordPlay').onclick=async()=>{try{await audioSetup();if(mode!=='chord')return;chordPlaying=!chordPlaying;$('chordPlay').textContent=chordPlaying?'■ 停止':'▶ 発音';rebuildChord();restartAnalysis();}catch(e){status(e.message,true);}};
+$('chordStrike').onclick=()=>rebuildChord();
+$('chordClear').onclick=()=>{killVoices();for(const bank of banks){bank.levels.fill(0);const notes=bank.element.querySelector('.notes');notes.querySelectorAll('input').forEach(e=>e.value=0);notes.querySelectorAll('output').forEach(e=>e.textContent='0');notes.querySelectorAll('.note').forEach(e=>e.classList.remove('on'));}};
+$('addOctave').onclick=addBank;
+addBank();
+$('volume').oninput=e=>{if(programGain)programGain.gain.setTargetAtTime(Number(e.target.value),audioCtx.currentTime,.01);if(mode==='file'&&$('fileScope').value==='whole'){resetAnalysis();restartAnalysis();}};
+$('fileScope').onchange=()=>{resetAnalysis();restartAnalysis();};
+function options(){
+  const N=Number($('harmonics').value),a4=Number($('a4').value),max=Number($('yMax').value);
+  if(!Number.isInteger(N)||N<2||N>128)throw Error('倍音上限は2～128の整数にしてください。');
+  if(!Number.isFinite(a4)||a4<300||a4>500)throw Error('A4は300～500Hzにしてください。');
+  if($('yMode').value==='fixed'&&(!Number.isFinite(max)||max<=0))throw Error('縦軸上限は正の有限値にしてください。');
+  return {view,axis:$('axis').value,edge:Number($('edge').value),octave,N,a4,weight:$('weight').value};
+}
+function resetAnalysis(){cancelWhole();generation++;frame=null;lastBounds=null;hover=null;dirty=true;$('freeze').disabled=true;}
+function stopWorker(){clearTimeout(timer);timer=0;generation++;if(worker)worker.terminate();worker=null;pending=false;if(workerURL)URL.revokeObjectURL(workerURL);workerURL=null;}
+function restartAnalysis(){clearTimeout(timer);if(!pending)timer=setTimeout(tick,0);}
+function tick(){
+  if(document.hidden||!mode||pending)return;
+  if(mode==='file'&&$('fileScope').value==='whole'){analyseWhole();return;}
+  if(!analyser)return;
+  if($('modeDialog').open){timer=setTimeout(tick,100);return;}
+  let opts;
+  try{opts=options();}catch(e){status(e.message,true);timer=setTimeout(tick,250);return;}
+  if(mode==='mic'&&!stream){timer=setTimeout(tick,100);return;}
+  const fft=Number($('fft').value);
+  if(analyser.fftSize!==fft||!fftData){analyser.fftSize=fft;fftData=new Float32Array(fft);}
+  analyser.getFloatTimeDomainData(fftData);
+  if(!worker){
+    const source=audioPower.toString()+'\n'+analyse.toString()+`;onmessage=e=>{try{const start=performance.now();const spectrum=audioPower(e.data.samples,e.data.sampleRate);const result=analyse(spectrum.power,spectrum.df,e.data.options);result.windowMs=e.data.samples.length/e.data.sampleRate*1000;result.df=spectrum.df;postMessage({result,generation:e.data.generation,ms:performance.now()-start},[result.x.buffer,result.re.buffer,result.im.buffer]);}catch(err){postMessage({error:err.message,generation:e.data.generation});}}`;
+    workerURL=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));
+    try{worker=new Worker(workerURL);}catch(e){status('解析Workerを開始できません：'+e.message,true);stopWorker();return;}
+    worker.onmessage=e=>{
+      pending=false;
+      if(e.data.generation===generation){if(e.data.error)status(e.data.error,true);else{frame=e.data.result;computeMs=e.data.ms;dirty=true;}}
+      timer=setTimeout(tick,Math.max(0,Number($('interval').value)-(performance.now()-sentAt)));
+    };
+    worker.onerror=e=>{status('解析処理でエラーが発生しました：'+e.message,true);stopWorker();};
+  }
+  pending=true;sentAt=performance.now();worker.postMessage({samples:fftData,sampleRate:audioCtx.sampleRate,options:opts,generation});
+}
+let sentAt=0;
+function updateAxis(){
+  const edge=Number($('edge').value);$('pager').hidden=$('axis').value!=='octave';
+  $('octavePage').textContent=names[edge]+octave+' – '+names[edge]+(octave+1);
+  $('prevOct').disabled=octave<=-8;$('nextOct').disabled=octave>=18;
+}
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{
+  view=b.dataset.view;document.querySelectorAll('[data-view]').forEach(x=>{const on=x===b;x.classList.toggle('active',on);x.setAttribute('aria-pressed',on);});
+  $('legend').hidden=!isVector();
+  $('legend').innerHTML=view==='characteristic'?'<span>−180°</span><span class="gradient" style="background:linear-gradient(90deg,#ed5ced,#5c5ced,#5ceded,#5ced5c,#eded5c,#ed5c5c,#ed5ced)"></span><span>+180° · S −120° / P 0° / H +120°</span>':'<span>−90°</span><span class="gradient"></span><span>+90°</span>';
+  resetAnalysis();restartAnalysis();
+});
+$('prevOct').onclick=()=>{octave=Math.max(-8,octave-1);updateAxis();resetAnalysis();restartAnalysis();};
+$('nextOct').onclick=()=>{octave=Math.min(18,octave+1);updateAxis();resetAnalysis();restartAnalysis();};
+for(const id of ['axis','edge','weight','harmonics','fft','a4'])$(id).addEventListener('change',()=>{
+  try{options();if(id==='a4')rebuildChord();updateAxis();resetAnalysis();restartAnalysis();}catch(e){status(e.message,true);}
+});
+for(const id of ['angles','yMode','yMax'])$(id).addEventListener('change',()=>{$('yMax').disabled=$('yMode').value!=='fixed';dirty=true;});
+$('freeze').onclick=()=>{if(!lastBounds)return;$('yMax').value=String(Math.max(Math.abs(lastBounds.min),lastBounds.max));$('yMode').value='fixed';$('yMax').disabled=false;dirty=true;};
+function isVector(){return view==='vector'||view==='characteristic';}
+function vectorColor(p,v){return view==='characteristic'?characteristicColor(p,v):phaseColor(p,v);}
+function yBounds(y){
+  const fixed=$('yMode').value==='fixed',limit=Number($('yMax').value);
+  if(fixed&&Number.isFinite(limit)&&limit>0)return {min:view==='term'?-limit:0,max:limit};
+  let max=0;for(const v of y)max=Math.max(max,Math.abs(v));max=max>1e-24?max*1.16:1e-8;
+  return {min:view==='term'?-max:0,max};
+}
+function draw(){
+  const canvas=$('plot'),w=canvas.clientWidth,h=canvas.clientHeight,dpr=Math.min(2,devicePixelRatio||1);
+  if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);}
+  const ctx=canvas.getContext('2d');ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle='#090d0f';ctx.fillRect(0,0,w,h);
+  const l=w<500?64:84,r=w-22,t=38,b=h-62;
+  const d=frame;
+  if(!d){ctx.fillStyle='#82949e';ctx.font='13px system-ui';ctx.textAlign='center';ctx.fillText(mode?'音声入力を待っています':'入力を選んでください',w/2,h/2);$('readout').textContent='—';return;}
+  const y=Float64Array.from(d.re,(p,i)=>view==='power'?p:view==='term'?d.im[i]:Math.hypot(p,d.im[i]));
+  const bounds=yBounds(y);lastBounds=bounds;$('freeze').disabled=false;
+  const px=v=>l+(v-d.lo)/(d.hi-d.lo)*(r-l),py=v=>b-(v-bounds.min)/(bounds.max-bounds.min)*(b-t);
+  ctx.font='11px system-ui';ctx.lineWidth=1;
+  for(let j=0;j<=4;j++){
+    const v=bounds.min+(bounds.max-bounds.min)*j/4,yy=py(v);ctx.strokeStyle='#202a30';ctx.beginPath();ctx.moveTo(l,yy);ctx.lineTo(r,yy);ctx.stroke();
+    ctx.textAlign='right';ctx.fillStyle='#859aa6';ctx.fillText(v===0?'0':v.toExponential(2),l-10,yy+4);
+  }
+  ctx.textAlign='left';ctx.fillStyle='#a8c1ca';ctx.fillText(view==='power'?'P(f)':view==='term'?'Π(f)':'|Z(f)|',l,20);
+  ctx.textAlign='right';ctx.fillStyle='#6f8792';ctx.fillText((d.whole?'音声全体（STFT平均） · ':'現在位置 · ')+'線形二乗強度',r,20);
+  ctx.textAlign='center';ctx.fillStyle='#a9bdc7';
+  if(d.options.axis==='fold'||d.options.axis==='octave'){
+    for(let k=0;k<=12;k++){
+      const x=d.lo+k/12,m=d.options.edge+k,pc=m%12,oct=d.options.octave+Math.floor(m/12);
+      ctx.fillText(names[pc]+(d.options.axis==='octave'?oct:''),px(x),b+23);
+      if(d.options.axis==='octave'&&(k===0||k===6||k===12))ctx.fillText((d.root*2**x).toFixed(1)+' Hz',px(x),b+44);
+    }
+  }else{
+    const step=Math.max(1,Math.ceil((d.hi-d.lo)*82/(r-l)));
+    for(let oct=Math.ceil(d.lo/step)*step;oct<=d.hi;oct+=step){ctx.fillText(names[d.options.edge]+oct,px(oct),b+23);ctx.fillText((d.root*2**oct).toPrecision(3)+' Hz',px(oct),b+44);}
+  }
+  ctx.save();ctx.beginPath();ctx.rect(l,t,r-l,b-t);ctx.clip();
+  if(view==='term'){ctx.strokeStyle='#6c8089';ctx.beginPath();ctx.moveTo(l,py(0));ctx.lineTo(r,py(0));ctx.stroke();}
+  const ix=[];
+  for(let start=0;start<y.length;){const col=Math.floor(px(d.x[start]));let end=start+1,min=start,max=start;
+    while(end<y.length&&Math.floor(px(d.x[end]))===col){if(y[end]<y[min])min=end;if(y[end]>y[max])max=end;end++;}
+    ix.push(...[...new Set([start,min,max,end-1])].sort((a,b)=>a-b));start=end;
+  }
+  ctx.lineWidth=1.6;
+  if(!isVector()){
+    ctx.strokeStyle=view==='power'?'#84dbcc':'#97b9f5';ctx.beginPath();ix.forEach((i,j)=>j?ctx.lineTo(px(d.x[i]),py(y[i])):ctx.moveTo(px(d.x[i]),py(y[i])));ctx.stroke();
+  }else for(let j=1;j<ix.length;j++){const a=ix[j-1],i=ix[j];ctx.strokeStyle=vectorColor(d.re[i],d.im[i]);ctx.beginPath();ctx.moveTo(px(d.x[a]),py(y[a]));ctx.lineTo(px(d.x[i]),py(y[i]));ctx.stroke();}
+  ctx.restore();
+  if(isVector()&&$('angles').checked){
+    const candidates=peakIndices(y,d.options.axis==='fold').filter(i=>y[i]>bounds.max*.015&&y[i]<=bounds.max).sort((a,b)=>y[b]-y[a]),boxes=[];
+    for(const i of candidates){
+      const angle=Math.atan2(d.im[i],d.re[i])*180/Math.PI,label=angle.toFixed(1)+'°',width=ctx.measureText(label).width+10;
+      const xx=Math.max(l+width/2,Math.min(r-width/2,px(d.x[i]))),yy=Math.max(t+12,py(y[i])-9),box={l:xx-width/2,r:xx+width/2,t:yy-12,b:yy+2};
+      if(boxes.some(b=>box.l<b.r&&box.r>b.l&&box.t<b.b&&box.b>b.t))continue;
+      ctx.fillStyle=vectorColor(d.re[i],d.im[i]);ctx.fillText(label,xx,yy);boxes.push(box);if(boxes.length>=60)break;
+    }
+  }
+  if(hover!==null){
+    const target=d.lo+Math.max(0,Math.min(1,(hover-l)/(r-l)))*(d.hi-d.lo);let low=0,high=d.x.length-1;
+    while(low<high){const mid=(low+high)>>1;if(d.x[mid]<target)low=mid+1;else high=mid;}
+    const i=low&&Math.abs(d.x[low-1]-target)<Math.abs(d.x[low]-target)?low-1:low;
+    ctx.strokeStyle='#ffffff30';ctx.beginPath();ctx.moveTo(px(d.x[i]),t);ctx.lineTo(px(d.x[i]),b);ctx.stroke();
+    const midi=12*d.x[i]+d.options.edge+12,nearest=Math.round(midi),pc=((nearest%12)+12)%12;
+    const location=names[pc]+(d.options.axis==='fold'?'':Math.floor(nearest/12)-1)+' '+((midi-nearest)*100).toFixed(1)+' c';
+    $('readout').textContent=location+' · '+(d.options.axis==='fold'?'':(d.root*2**d.x[i]).toFixed(2)+' Hz · ')+y[i].toExponential(4)+(isVector()&&y[i]>0?' · '+(Math.atan2(d.im[i],d.re[i])*180/Math.PI).toFixed(2)+'°':'');
+  }else $('readout').textContent=(d.options.axis==='fold'?'オクターブ集計':d.options.axis==='full'?'全周波数':$('octavePage').textContent)+(d.whole?' · 音声全体 STFT平均（'+d.count+'フレーム）':'')+' · '+d.windowMs.toFixed(0)+' ms 窓 · FFT刻み '+d.df.toFixed(2)+' Hz';
+  canvas.setAttribute('aria-label',(view==='power'?'音高周波数値':view==='term'?'調波極性(スカラー)':view==='characteristic'?'調波特性ベクトル':'調波極性ベクトル')+'。縦軸 '+bounds.min.toExponential(2)+' ～ '+bounds.max.toExponential(2));
+}
+$('plot').addEventListener('pointermove',e=>{hover=e.clientX-$('plot').getBoundingClientRect().left;dirty=true;});
+$('plot').addEventListener('pointerleave',()=>{hover=null;dirty=true;});
+new ResizeObserver(()=>dirty=true).observe($('plotWrap'));
+function animate(){if(dirty&&!document.hidden){const start=performance.now();draw();drawMs=performance.now()-start;dirty=false;}raf=requestAnimationFrame(animate);}
+document.addEventListener('visibilitychange',()=>{if(document.hidden){stopWorker();cancelWhole();}else{dirty=true;restartAnalysis();}});
+window.addEventListener('pagehide',()=>{stopMic();killVoices();stopWorker();cancelWhole();if(fileURL)URL.revokeObjectURL(fileURL);audioCtx?.close();});
+updateAxis();$('freeze').disabled=true;$('modeDialog').showModal();animate();
+
+</script></body></html>
