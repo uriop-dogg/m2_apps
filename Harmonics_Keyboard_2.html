@@ -1,0 +1,612 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>倍音調律きーぼーでぃずむ②</title>
+<style>
+:root{color-scheme:dark;--bg:#111412;--panel:#1c201e;--deep:#111613;--line:#3c433b;--ink:#eee9d9;--muted:#a0ab9d;--gold:#dbbf78;--red:#ff9792;--blue:#91c5f7;--key:#292f2b;--shadow:#080b09}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Segoe UI","Yu Gothic UI",sans-serif}body[data-theme=paper]{color-scheme:light;--bg:#e8e5db;--panel:#f7f4e9;--deep:#e6e7dc;--line:#bbbdac;--ink:#26372f;--muted:#59685d;--gold:#796125;--red:#a32d36;--blue:#225e98;--key:#eeeee5;--shadow:#c5c7b9}body[data-theme=midnight]{--bg:#0e1423;--panel:#172136;--deep:#10192c;--line:#34435b;--gold:#b8bcf6;--key:#23314a;--shadow:#080c16}
+button,input,select{font:inherit;color:inherit}button,select,input{border:1px solid var(--line);border-radius:6px;background:var(--deep);padding:7px 9px}button{cursor:pointer}button:hover{border-color:var(--gold)}button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}input[type=number]{width:85px}input[type=checkbox]{accent-color:var(--gold)}input[type=range]{accent-color:var(--gold);width:110px}button.on,.primary{background:var(--gold);color:var(--bg);border-color:var(--gold)}header{display:flex;align-items:center;gap:16px;max-width:1440px;margin:auto;padding:23px 24px 17px}h1{font-size:25px;letter-spacing:.03em;margin:0;font-weight:650}.eyebrow{font:11px ui-monospace,monospace;letter-spacing:.2em;color:var(--gold)}.shrimp{font-size:36px;background:none;border:0;padding:0;transition:transform .3s}.shrimp:hover{transform:rotate(-20deg)}.header-right{margin-left:auto;display:flex;gap:10px;align-items:center}.status{font-size:12px;color:var(--muted)}main{max-width:1440px;margin:auto;padding:0 24px 24px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;box-shadow:0 5px 18px #0002}.section-head{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line)}h2{font-size:14px;letter-spacing:.08em;margin:0;font-weight:600}.section-head .right{margin-left:auto;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.tag{font:10px ui-monospace,monospace;color:var(--gold);letter-spacing:.1em}.monitor-grid{display:grid;grid-template-columns:1fr 290px 1fr;gap:12px;padding:17px 20px}.meter{padding:9px 12px;min-width:0}.meter h3{margin:0 0 13px;font-size:13px;font-weight:500}.h{color:var(--red)}.s{color:var(--blue)}.metric{display:flex;align-items:baseline;gap:12px}.metric strong{font:42px/1.1 ui-monospace,monospace;font-weight:400}.metric span{font-size:11px;color:var(--muted)}.reference{font:15px ui-monospace,monospace;margin:12px 0 10px}.leds{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}.led{font:11px ui-monospace,monospace;text-align:center;border:1px solid var(--line);border-radius:4px;padding:3px 0;color:var(--muted);opacity:.45}.led.lit{opacity:1;border-color:currentColor;box-shadow:inset 0 0 9px currentColor;color:var(--red)}.s .led.lit{color:var(--blue)}.fit{font:11px ui-monospace,monospace;color:var(--muted);margin-top:9px}.dial{width:100%;max-height:244px}.dial text{fill:var(--muted);font:11px ui-monospace,monospace}.dial .ring{fill:var(--deep);stroke:var(--line)}.monitor-foot{display:flex;justify-content:space-between;gap:15px;border-top:1px solid var(--line);padding:9px 18px;color:var(--muted);font-size:11px}.reference-controls{display:flex;gap:9px;flex-wrap:wrap;align-items:end}.field{display:flex;flex-direction:column;gap:4px;font-size:11px;color:var(--muted)}.field input,.field select{color:var(--ink);font-size:13px}.reference-controls input{width:76px}.reference-controls #ratioOffset{width:88px}.keyboard-head{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:15px 18px}.keyboard-head .reference-controls{margin-left:auto}.keyboard-wrap{overflow:auto;padding:5px 18px 12px}.keyboard{min-width:800px;user-select:none}.key-row{display:flex;gap:6px;margin-bottom:7px}.key{background:var(--key);border:1px solid var(--line);box-shadow:0 3px 0 var(--shadow);border-radius:6px;flex:1;min-width:0;height:61px;padding:5px 7px;display:flex;flex-direction:column;align-items:stretch;justify-content:space-between;position:relative;touch-action:none}.key.wide{flex:1.4}.key.xwide{flex:1.8}.key.space{flex:7}.key .physical{font:11px ui-monospace,monospace;color:var(--muted);text-align:left}.key .pitch{font-size:16px;text-align:center;line-height:20px;white-space:nowrap}.key .shift{font-size:9px;position:absolute;right:5px;top:5px;color:var(--muted)}.key.p{border-bottom:2px solid #b15d55;color:var(--red)}.key.n{border-bottom:2px solid #518cb5;color:var(--blue)}.key.custom{color:var(--ink);border-bottom:2px solid #93988c}.key.control .pitch{font-size:10px;color:var(--gold);white-space:normal;line-height:13px}.key.active{background:var(--gold);color:var(--bg);transform:translateY(2px);box-shadow:none}.key.active .physical,.key.active .pitch{color:var(--bg)}.key.overridden:after{content:'●';position:absolute;right:4px;bottom:2px;color:var(--gold);font-size:9px}.key .hover-ratio{display:none;font-size:13px}.key.note:hover .normal{display:none}.key.note:hover .hover-ratio{display:block}.keyboard-foot{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:11px 18px;border-top:1px solid var(--line)}.keyboard-foot .status{margin-left:auto}.small{font-size:11px}.settings{display:grid;grid-template-columns:1.6fr 1fr 1fr;gap:15px}.settings .panel{padding:16px}.settings h2{margin-bottom:14px;color:var(--gold);font-size:12px}.controls{display:flex;gap:12px;align-items:end;flex-wrap:wrap}.settings .field{margin-bottom:9px}.settings select{max-width:200px}.note-info{color:var(--muted);font-size:11px;margin-top:8px}.toolbar{display:flex;gap:8px;align-items:center;flex-wrap:wrap}footer{display:flex;gap:12px;justify-content:space-between;align-items:center;color:var(--muted);font-size:11px;padding:4px 0 16px}details{border-top:1px solid var(--line);padding:15px 0;color:var(--muted)}summary{cursor:pointer}details p{max-width:1050px}dialog{width:470px;max-width:95vw;background:var(--panel);color:var(--ink);border:1px solid var(--gold);border-radius:12px;padding:23px}dialog::backdrop{background:#0009}dialog h2{margin-bottom:18px}dialog .field{margin-bottom:13px}dialog input,dialog select{width:100%}dialog .toolbar{justify-content:flex-end;margin-top:19px}.error{color:var(--red);font-size:12px;min-height:18px}#notice{min-height:20px;color:var(--gold);font-size:12px}.hidden{display:none!important}#liveNotes{max-width:68%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#testResults{white-space:pre-wrap;font:12px monospace}.pair-table{border-collapse:collapse;font:12px ui-monospace,monospace;margin:12px 0}.pair-table th,.pair-table td{padding:6px 12px;border:1px solid var(--line)}@media(max-width:1000px){.monitor-grid{grid-template-columns:1fr 230px 1fr;padding:10px}.settings{grid-template-columns:1fr 1fr}.settings .panel:first-child{grid-column:1/-1}.keyboard-head .reference-controls{margin-left:0}h1{font-size:21px}.header-right{flex-direction:column;gap:4px}}@media(max-width:680px){header,main{padding-left:12px;padding-right:12px}.monitor-grid{grid-template-columns:1fr 1fr}.dial-box{grid-column:1/-1;grid-row:1;max-width:220px;justify-self:center}.metric strong{font-size:30px}.settings{display:block}.section-head{flex-wrap:wrap}.section-head .right{margin-left:0}.header-right .status{display:none}h1{font-size:17px}.shrimp{font-size:27px}}
+.meter{border:1px solid #62532d;border-radius:7px;background:linear-gradient(180deg,var(--deep),var(--panel));box-shadow:inset 0 0 22px #b391270a}.leds{grid-template-columns:repeat(auto-fill,minmax(48px,1fr));align-content:start;min-height:86px}.led{display:flex;flex-direction:column;align-items:center;gap:5px;opacity:1;padding:7px 2px;border-color:var(--line);box-shadow:none!important}.led b{font-size:13px;font-weight:500}.led i{width:8px;height:8px;border-radius:50%;background:#30392b;border:1px solid #526044}.led.lit i{background:#d4e98a;box-shadow:0 0 8px #cbe77b}.led small{font-size:10px;min-height:12px;color:var(--muted)}.monitor-empty{grid-column:1/-1;color:var(--muted);font-size:12px;padding:20px 0}.needle{transform-origin:140px 125px;transition:transform .3s ease,opacity .2s}.needle.unavailable{opacity:0}#editClear{margin-right:auto;color:var(--red)}
+/* v2.0.21: original black / brass instrument layout, inline rather than popup. */
+.legacy-monitor{--panel:#17170e;--deep:#090c07;--line:#51451c;--ink:#cfb952;--muted:#938339;--gold:#cfb952;--red:#f3674d;--blue:#58aee6;background:#17170e;color:var(--ink);border-color:#51451c;border-radius:5px;font-family:ui-monospace,Consolas,monospace}
+.legacy-monitor .section-head{border-color:#51451c;background:#14160e;padding:15px 18px}.legacy-monitor h2{color:#d1ba54;font-size:17px}.legacy-monitor .tag{color:#948235}.legacy-monitor .monitor-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px;padding:16px 18px}.legacy-monitor .dial-box{grid-column:1/-1;grid-row:1;justify-self:center;width:min(100%,525px);border:1px solid #5a4918;border-radius:6px;background:linear-gradient(#11150c,#0c0e08);padding:14px 15px 12px;box-shadow:inset 0 0 24px #ac8a180a}.dial-caption{text-align:center;font-size:10px;letter-spacing:.19em;color:#a59037;margin-bottom:9px}.legacy-monitor .dial{display:block;max-height:none;width:100%;aspect-ratio:1;border:1px solid #443917;background:#080b06}.legacy-monitor .dial text{fill:#cab344;font-weight:600;font-size:9px}.legacy-monitor .dial .ring{fill:#090c07;stroke:#806b22;stroke-width:1}.legacy-monitor .needle line{filter:drop-shadow(0 0 3px currentColor)}.legacy-monitor #needleH{color:#f3674d}.legacy-monitor #needleS{color:#58aee6}.dial-readouts{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:10px;font-size:11px;font-weight:600}.dial-readouts>span{padding:7px 8px;border:1px solid #3b3216;background:#090c07}.dial-readouts b{font-size:10px;margin-right:7px}.legacy-monitor .meter{grid-row:2;padding:15px 16px;border-color:#5a4918;border-radius:5px;background:linear-gradient(#11150c,#090c07);color:#c5ae45}.legacy-monitor .meter h3{font-size:13px;font-weight:600;letter-spacing:.09em}.legacy-monitor .metric{display:inline-flex;border:1px solid #443917;padding:3px 7px;gap:7px;flex-direction:row-reverse}.legacy-monitor .metric strong{font-size:12px}.legacy-monitor .metric span{font-size:10px;color:#a48e36}.legacy-monitor .reference{display:none}.legacy-monitor .fit{font-size:11px;color:#b39c3e;margin-top:10px}.legacy-monitor .leds{margin-top:12px;padding:10px 12px;display:flex;gap:12px;flex-wrap:wrap;min-height:84px;border:1px solid #443917;background:#080b06}.legacy-monitor .led{border:0;background:none;padding:0;width:40px;color:#8a7930;gap:6px}.legacy-monitor .led.lit{color:#d5c45a}.legacy-monitor .led b{font-size:11px}.legacy-monitor .led i{width:13px;height:13px;border:1px solid #364532;background:#192017}.legacy-monitor .led.lit i{background:#9bff88;border-color:#b4f99c;box-shadow:0 0 5px #a3ff84,0 0 15px #75eb61}.legacy-monitor .led small{color:#a0e193;font-size:9px}.legacy-monitor .monitor-foot{border-color:#51451c;color:#a18d3d}.legacy-monitor .monitor-empty{color:#8c7a36}.legacy-monitor input{background:#090c07;border-color:#5a4918;color:#d1bc56}.legacy-monitor input[type=checkbox]{accent-color:#cbb353}@media(max-width:680px){.legacy-monitor .monitor-grid{grid-template-columns:1fr}.legacy-monitor .meter{grid-row:auto}.legacy-monitor .dial-box{grid-column:1;max-width:100%}.dial-readouts{font-size:10px}}
+/* Instrument-wide vintage synthesizer skin */
+:root{--bg:#171918;--panel:#292d2b;--deep:#151b18;--line:#4d5148;--ink:#eee5ce;--muted:#aaa995;--gold:#c9ab70;--red:#f39778;--blue:#8ac6ce;--key:#e1d9c5;--shadow:#101410}
+body{background:radial-gradient(ellipse at 50% 0,#353b35 0,#171918 75%);padding:0 18px;border-left:12px solid #62462f;border-right:12px solid #62462f;min-height:100vh;box-shadow:inset 3px 0 6px #0008,inset -3px 0 6px #0008}header{padding:18px 20px 14px;max-width:1480px}h1{font-size:23px;font-weight:600;letter-spacing:.07em}.eyebrow{font-size:9px;letter-spacing:.24em;color:#bdac84}.shrimp{font-size:30px}main{max-width:1480px;padding:0 20px 22px}.panel{border-radius:5px;border-color:var(--line);box-shadow:0 5px 8px #0005,inset 0 1px #ffffff09;margin-bottom:13px;background:linear-gradient(#2b302c,#252a27)}button,input,select{border-radius:3px}button{background:linear-gradient(#383d36,#292f29);border-color:#606353;font-size:12px;box-shadow:0 2px 1px #0004}button.on,.primary{background:#c5a36a;border-color:#ddc38c;color:#1d231d}input,select{background:#151c16;border-color:#4b5545;color:#e1d6b3;padding:5px 7px}.field{font-size:10px;letter-spacing:.035em}.section-head,.keyboard-head{padding:10px 14px}h2{font-size:13px}.tag{font-size:9px}.header-right{gap:12px}.status{font-size:11px}
+.legacy-monitor{--panel:#1f2821;--deep:#0c160e;--line:#49543f;--ink:#d4d39f;--muted:#8e9d7c;--gold:#bcbb7a;--red:#ed9476;--blue:#87c8d3;background:linear-gradient(#252d26,#1b241e);border-color:#59604d;box-shadow:inset 0 1px #c1c5a01a,0 5px 8px #0005}.legacy-monitor .section-head{background:none;border-color:#48503e}.legacy-monitor h2{color:#e3dab6;font-size:15px;letter-spacing:.12em}.legacy-monitor .tag{color:#8d9c7b}.legacy-monitor .section-head .right{gap:10px}.legacy-monitor input{background:#0c160e;color:#d8d9a4;border-color:#4b593e}.legacy-monitor .monitor-grid{grid-template-columns:minmax(0,1fr) 310px minmax(0,1fr);gap:20px;align-items:center;padding:12px 20px}.legacy-monitor .dial-box{grid-column:2;grid-row:1;width:310px;max-width:100%;padding:9px;background:#121d15;border:1px solid #536044;border-radius:4px;box-shadow:inset 0 0 16px #0007}.legacy-monitor .dial{aspect-ratio:auto;height:250px;max-height:250px;border-color:#33462f;background:radial-gradient(#16261a,#0b150d)}.legacy-monitor .dial .ring{fill:#0d190f;stroke:#738458}.legacy-monitor .dial text{fill:#bfc78c;font-size:9px}.dial-caption{font-size:8px;letter-spacing:.18em;color:#8e9e70;margin-bottom:6px}.dial-readouts{font-size:10px;gap:6px;margin-top:6px}.dial-readouts>span{background:#101b12;border-color:#38482f;padding:4px 5px;white-space:nowrap}.dial-readouts b{font-size:8px;margin-right:4px}.legacy-monitor .meter{grid-row:1;align-self:center;padding:14px 12px;background:#131e16;border:1px solid #4a583d;box-shadow:inset 0 0 12px #0005;border-radius:4px;overflow:hidden}.legacy-monitor .meter.h{grid-column:1}.legacy-monitor .meter.s{grid-column:3}.legacy-monitor .meter h3{font-size:12px;color:#c7cc9b;letter-spacing:.05em;margin-bottom:15px}.legacy-monitor .metric{border-color:#405035;background:#0c170e;color:#bdc48a}.legacy-monitor .metric strong{font-size:25px;line-height:1}.legacy-monitor .metric span{color:#94a374;font-size:9px}.legacy-monitor .leds{display:flex;flex-wrap:nowrap;height:82px;min-height:82px;overflow:hidden;padding:10px 8px;gap:8px;border-color:#3a4b31;background:#0c170f;mask-image:linear-gradient(to right,#000 92%,transparent)}.legacy-monitor .led{flex:0 0 34px;color:#819565;gap:6px}.legacy-monitor .led.lit{color:#d4d99e}.legacy-monitor .led i{width:10px;height:10px;background:#20301d;border-color:#40543a}.legacy-monitor .led.lit i{background:#b9eb87;border-color:#c9eda5;box-shadow:0 0 5px #a8d97d,0 0 10px #9fcb5a88}.legacy-monitor .led small{color:#a9c988;font-size:8px}.legacy-monitor .fit{color:#98a67e;font-size:10px;white-space:nowrap}.legacy-monitor .monitor-foot{border-color:#424e38;color:#93a280;font-size:10px;padding:6px 14px}.legacy-monitor .monitor-empty{font-size:11px;color:#809372}
+.performance-panel{border-top:3px solid #ab8c57;background:linear-gradient(#30372f,#202820)}.keyboard-head{gap:14px;border-bottom:1px solid #46513f;margin-bottom:9px}.keyboard-head .reference-controls{gap:8px}.reference-controls input{width:68px}.reference-controls #ratioOffset{width:77px}.keyboard-wrap{padding:3px 14px 9px}.keyboard{min-width:740px}.key-row{gap:5px;margin-bottom:5px}.key{height:49px;border-radius:3px;border:1px solid #a8a28e;background:linear-gradient(#eee7d6,#d7cfb9);box-shadow:0 3px 0 #938d79,0 4px 3px #0007;color:#41483d;padding:4px 6px}.key .physical,.key .shift{color:#747769;font-size:9px}.key .pitch{font-size:15px;line-height:17px}.key.p{color:#9d3d2d;border-bottom:3px solid #ad5740}.key.n{color:#245f6b;border-bottom:3px solid #4e8790}.key.custom{color:#454b41;border-bottom:3px solid #8c9582}.key.control{background:linear-gradient(#384036,#283127);border:1px solid #65705a;box-shadow:0 3px #131c13;color:#d6d5ad}.key.control .pitch{color:#c7c19a;font-size:9px;line-height:11px}.key.control .physical{color:#9da68e}.key.active{background:#d6b66f;color:#222d20;border-color:#ebca82;box-shadow:0 1px #776444;transform:translateY(2px)}.key.active .physical,.key.active .pitch{color:#263122}.keyboard-foot{padding:8px 14px;background:#1b241d;border-color:#49533d}.keyboard-foot #refHz{font-family:monospace;color:#bdc693}.keyboard-foot input{width:65px}.settings{gap:12px;grid-template-columns:1.5fr 1fr 1fr}.settings .panel{padding:12px 14px}.settings h2{font-size:10px;color:#b7b992;letter-spacing:.15em;margin-bottom:12px}.settings .controls{gap:9px}.settings .field{margin-bottom:6px}.settings input[type=number]{width:73px}.settings input[type=range]{width:90px}footer{font-size:10px;padding-bottom:8px}details{font-size:12px}.note-info{font-size:10px}#notice:empty{min-height:0}
+body[data-theme=paper]{background:#d4d0bd;--panel:#e8e3d0;--ink:#2c3c2c;--muted:#63705a;--line:#969c83}body[data-theme=paper] .panel:not(.legacy-monitor){background:#e5e0ce}body[data-theme=paper] .keyboard-foot{background:#d2d1bd}body[data-theme=midnight]{background:#181d27;--panel:#293340;--line:#536173;--ink:#dfdfd6}body[data-theme=midnight] .panel:not(.legacy-monitor){background:#293340}
+@media(max-width:1050px){body{padding:0 7px;border-width:8px}header,main{padding-left:12px;padding-right:12px}.legacy-monitor .monitor-grid{grid-template-columns:minmax(0,1fr) 260px minmax(0,1fr);gap:10px;padding:10px}.legacy-monitor .dial-box{width:260px}.legacy-monitor .dial{height:210px}.legacy-monitor .meter{padding:10px 8px}.legacy-monitor .meter h3{font-size:10px}.dial-readouts{font-size:9px}.keyboard-head .reference-controls{margin-left:auto}.settings{grid-template-columns:1.4fr 1fr 1fr}.settings .panel:first-child{grid-column:auto}.key{height:48px}}
+@media(max-width:720px){.legacy-monitor .monitor-grid{grid-template-columns:1fr 1fr}.legacy-monitor .dial-box{grid-column:1/-1;grid-row:1}.legacy-monitor .meter{grid-row:2}.legacy-monitor .meter.h{grid-column:1}.legacy-monitor .meter.s{grid-column:2}.legacy-monitor .section-head .right{margin-left:0}.keyboard-head .reference-controls{margin-left:0}.settings{display:block}.header-right .status{display:none}h1{font-size:17px}}
+/* Compact desktop performance surface */
+header{padding-top:10px;padding-bottom:9px}.legacy-monitor .monitor-grid{padding-top:7px;padding-bottom:7px}.legacy-monitor .dial{height:205px;max-height:205px}.legacy-monitor .dial-box{width:270px;padding:7px}.legacy-monitor .monitor-grid{grid-template-columns:minmax(0,1fr) 270px minmax(0,1fr)}.legacy-monitor .section-head{padding-top:7px;padding-bottom:7px}.legacy-monitor .meter{padding-top:10px;padding-bottom:10px}.legacy-monitor .meter h3{margin-bottom:9px}.legacy-monitor .leds{height:70px;min-height:70px}.keyboard-head{padding-top:7px;padding-bottom:7px;margin-bottom:5px}.key{height:42px}.key-row{margin-bottom:4px;gap:4px}.keyboard-wrap{padding-bottom:6px}.keyboard-foot{padding-top:5px;padding-bottom:5px}.panel{margin-bottom:10px}.key.control{border-bottom:3px solid #75ae78}.key.control .pitch{color:#d1e5b5}.key.origin{color:#78621b;border-bottom:3px solid #c6a437;background:linear-gradient(#f2e8bf,#ded09a)}.key.origin.active{background:#e5bd58}.key.origin .normal{font-weight:650}
+@media(min-width:721px) and (max-height:850px){header{padding-top:7px;padding-bottom:7px}h1{font-size:20px}.legacy-monitor .dial{height:175px}.legacy-monitor .dial-box{width:235px}.legacy-monitor .monitor-grid{grid-template-columns:minmax(0,1fr) 235px minmax(0,1fr)}.dial-caption{font-size:7px}.dial-readouts{font-size:9px}.key{height:37px}.key .pitch{font-size:13px;line-height:14px}.key.control .pitch{font-size:8px;line-height:10px}.keyboard-head{padding-top:5px;padding-bottom:5px}.keyboard-head .field{gap:2px}.keyboard-head input,.keyboard-head select{padding:4px 6px}}
+@media(max-width:720px){.legacy-monitor .monitor-grid{grid-template-columns:1fr 1fr}.legacy-monitor .dial-box{grid-column:1/-1}.key{height:42px}}
+@media(min-width:721px) and (max-height:750px){.legacy-monitor .dial{height:140px}.legacy-monitor .dial-box{width:220px}.legacy-monitor .monitor-grid{grid-template-columns:minmax(0,1fr) 220px minmax(0,1fr)}.legacy-monitor .meter{padding-top:7px;padding-bottom:7px}.legacy-monitor .leds{height:60px;min-height:60px}.legacy-monitor .fit{margin-top:6px}}
+/* Shared keycaps, identification by legends and lower-edge stripes only. */
+.key.control,.key.origin{background:linear-gradient(#eee7d6,#d7cfb9);border-top:1px solid #a8a28e;border-left:1px solid #a8a28e;border-right:1px solid #a8a28e;box-shadow:0 3px 0 #938d79,0 4px 3px #0007}.key.control{border-bottom:3px solid #599265}.key.control .pitch{color:#326c41}.key.control .physical,.key.origin .physical,.key.origin .shift{color:#747769}.key.origin{color:#907114;border-bottom:3px solid #c6a437}.key.control.active,.key.origin.active{background:#d6b66f;box-shadow:0 1px #776444}.key.control.active .pitch{color:#263122}
+/* Vertical term banks flank a larger pitch-name circle. */
+.legacy-monitor .metric{display:none}.legacy-monitor .monitor-grid{grid-template-columns:minmax(0,1fr) 320px minmax(0,1fr);gap:16px;padding:7px 14px;align-items:stretch}.legacy-monitor .dial-box{width:320px;padding:5px 7px;align-self:center}.legacy-monitor .dial{height:245px;max-height:245px}.legacy-monitor .dial-caption{margin-bottom:3px}.legacy-monitor .dial-readouts{margin-top:3px}.legacy-monitor .meter{display:flex;flex-direction:column;height:292px;max-height:292px;padding:9px 12px}.legacy-monitor .meter h3{margin-bottom:5px}.legacy-monitor .leds{flex:1;min-height:0;height:auto;margin-top:0;padding:6px 10px;display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:5px;overflow:hidden;mask-image:linear-gradient(to bottom,#000 92%,transparent)}.legacy-monitor .led{display:grid;grid-template-columns:30px 16px 1fr;align-items:center;justify-items:start;gap:12px;flex:0 0 20px;width:100%;padding:0}.legacy-monitor .led b{text-align:right;justify-self:end;font-size:12px}.legacy-monitor .led small{font-size:10px;min-height:0}.legacy-monitor .fit{margin-top:5px;font-size:9px;flex:none}.legacy-monitor .monitor-empty{padding:12px 0}.legacy-monitor .monitor-foot{padding-top:4px;padding-bottom:4px}
+@media(min-width:721px) and (max-height:850px){.legacy-monitor .monitor-grid{grid-template-columns:minmax(0,1fr) 295px minmax(0,1fr);padding-top:4px;padding-bottom:4px}.legacy-monitor .dial-box{width:295px;padding:4px 6px}.legacy-monitor .dial{height:215px;max-height:215px}.legacy-monitor .meter{height:255px;max-height:255px}.legacy-monitor .dial-caption{font-size:7px}.legacy-monitor .dial-readouts{font-size:9px}.key{height:33px}.key-row{margin-bottom:3px}.keyboard-head{padding-top:3px;padding-bottom:3px;margin-bottom:3px}.keyboard-foot{padding-top:3px;padding-bottom:3px}header{padding-top:4px;padding-bottom:4px}.panel{margin-bottom:7px}}
+@media(max-width:720px){.legacy-monitor .monitor-grid{grid-template-columns:minmax(0,1fr) 220px minmax(0,1fr);gap:5px;padding:5px}.legacy-monitor .dial-box{grid-column:2;grid-row:1;width:220px}.legacy-monitor .dial{height:190px}.legacy-monitor .meter{grid-row:1;padding:6px 4px;max-height:235px}.legacy-monitor .meter.h{grid-column:1}.legacy-monitor .meter.s{grid-column:3}.legacy-monitor .meter h3{font-size:8px}.legacy-monitor .leds{padding:4px 2px}.legacy-monitor .led{grid-template-columns:18px 10px;gap:4px}.legacy-monitor .led small{display:none}.legacy-monitor .fit{white-space:normal;font-size:8px}}
+/* Narrow term strips and a dominant central dial. */
+.key.origin .normal{font-weight:400}.legacy-monitor .monitor-grid{grid-template-columns:170px minmax(0,420px) 170px;justify-content:center;gap:22px}.legacy-monitor .dial-box{width:100%;padding:4px 6px}.legacy-monitor .dial{height:290px;max-height:290px}.legacy-monitor .meter{width:170px;height:330px;max-height:330px;padding:8px}.legacy-monitor .meter h3{font-size:10px;letter-spacing:0}.legacy-monitor .leds{padding:6px 5px}.legacy-monitor .led{grid-template-columns:24px 12px 1fr;gap:8px}.legacy-monitor .fit{white-space:normal;font-size:8px}.keyboard-head{padding-left:10px;padding-right:10px;gap:10px}.keyboard-wrap{padding-left:10px;padding-right:10px;padding-top:0;padding-bottom:3px}.keyboard-foot{padding-left:10px;padding-right:10px}.performance-panel{border-top-width:2px}.key-row{gap:3px;margin-bottom:3px}
+@media(min-width:721px) and (max-height:850px){.legacy-monitor .monitor-grid{grid-template-columns:145px minmax(0,370px) 145px;gap:16px;padding:3px 10px}.legacy-monitor .dial{height:250px;max-height:250px}.legacy-monitor .dial-box{width:100%;padding:3px 5px}.legacy-monitor .meter{width:145px;height:286px;max-height:286px;padding:7px}.legacy-monitor .led{flex-basis:18px}.legacy-monitor .led small{font-size:9px}.legacy-monitor .meter h3{font-size:9px}.legacy-monitor .monitor-foot{padding-top:2px;padding-bottom:2px}.keyboard-head{padding-top:2px;padding-bottom:2px;margin-bottom:2px}.key{height:29px;padding:2px 5px}.key .pitch{font-size:12px;line-height:13px}.key .physical,.key .shift{font-size:8px}.key.control .pitch{font-size:8px;line-height:9px}.keyboard-foot{padding-top:2px;padding-bottom:2px}.keyboard-foot button,.keyboard-foot input{padding-top:3px;padding-bottom:3px}.panel{margin-bottom:5px}}
+@media(max-width:720px){.legacy-monitor .monitor-grid{grid-template-columns:80px minmax(0,300px) 80px;gap:5px;padding:4px}.legacy-monitor .dial-box{width:100%}.legacy-monitor .dial{height:230px;max-height:230px}.legacy-monitor .meter{width:80px;height:267px;max-height:267px;padding:5px 3px}.legacy-monitor .led{grid-template-columns:20px 12px;gap:5px}.legacy-monitor .led small{display:none}.legacy-monitor .meter h3{font-size:8px}.legacy-monitor .fit{font-size:7px}}
+/* A single instrument face: no nested towers around the dial. */
+.legacy-monitor{background:linear-gradient(135deg,#222c23,#18221b);border-color:#535a48}.legacy-monitor .section-head{background:transparent;border-bottom:1px solid #3b4836;padding:9px 17px}.legacy-monitor .monitor-grid{grid-template-columns:180px 320px 180px;gap:35px;justify-content:center;align-items:center;padding:12px 20px}.legacy-monitor .dial-box{border:0;box-shadow:none;background:transparent;width:320px;padding:0}.legacy-monitor .dial-caption{display:none}.legacy-monitor .dial{height:270px;max-height:270px;border:0;background:transparent}.legacy-monitor .dial .ring{fill:#111e14;stroke:#74835a}.legacy-monitor .dial-readouts{border-top:1px solid #46523b;padding-top:8px;margin-top:0;gap:18px}.legacy-monitor .dial-readouts>span{border:0;background:none;padding:0;font-size:11px}.legacy-monitor .meter{width:180px;height:256px;max-height:256px;align-self:center;border:0;border-radius:0;box-shadow:none;background:transparent;padding:0;overflow:hidden}.legacy-monitor .meter h3{font-size:11px;font-weight:500;color:#bdc5a3;letter-spacing:.04em;border-bottom:1px solid #49553c;padding-bottom:10px;margin-bottom:9px}.legacy-monitor .leds{border:0;border-radius:0;background:none;padding:0 6px;gap:7px;mask-image:linear-gradient(to bottom,#000 88%,transparent)}.legacy-monitor .led{grid-template-columns:25px 12px 1fr;gap:14px;flex-basis:20px}.legacy-monitor .led b{font-size:12px;font-weight:400}.legacy-monitor .led small{font-size:10px}.legacy-monitor .fit{border-top:1px solid #3c4934;margin-top:8px;padding-top:8px;line-height:1.5;color:#8f9d7d;font-size:9px}.legacy-monitor .monitor-foot{border-top:1px solid #3b4836;padding:6px 16px;color:#91a080}.performance-panel{border-top:2px solid #aa9160}.keyboard-head{padding:9px 13px;margin-bottom:5px}.keyboard-wrap{padding:0 13px 8px}.keyboard-foot{padding:6px 13px}.key{height:43px;border-radius:3px;padding:4px 6px}.key-row{gap:5px;margin-bottom:5px}.key .physical,.key .shift{font-size:9px}.key .pitch{font-size:14px;line-height:16px}.key.control .pitch{font-size:9px;line-height:11px}.key .physical{color:#767866}.settings{margin-top:12px}.settings .panel{background:#222a24;border-color:#444f40;box-shadow:none}.settings h2{color:#9ca88b}.settings .field{color:#9ca88b}
+@media(min-width:721px) and (max-height:850px){header{padding-top:5px;padding-bottom:5px}.legacy-monitor .section-head{padding:5px 13px}.legacy-monitor .monitor-grid{grid-template-columns:155px 280px 155px;gap:28px;padding:4px 16px}.legacy-monitor .dial-box{width:280px}.legacy-monitor .dial{height:235px;max-height:235px}.legacy-monitor .dial-readouts{padding-top:3px;gap:12px}.legacy-monitor .dial-readouts>span{font-size:10px}.legacy-monitor .meter{width:155px;height:237px;max-height:237px}.legacy-monitor .meter h3{padding-bottom:7px;margin-bottom:7px;font-size:10px}.legacy-monitor .fit{padding-top:5px;margin-top:5px;font-size:8px}.legacy-monitor .monitor-foot{padding:3px 13px}.keyboard-head{padding:5px 11px;margin-bottom:4px}.keyboard-wrap{padding:0 11px 4px}.keyboard-foot{padding:4px 11px}.key{height:36px;padding:3px 5px}.key-row{gap:4px;margin-bottom:4px}.key .pitch{font-size:13px;line-height:14px}.key .physical,.key .shift{font-size:8px}.key.control .pitch{font-size:8px;line-height:10px}}
+@media(max-width:720px){.legacy-monitor .monitor-grid{grid-template-columns:75px minmax(0,250px) 75px;gap:10px;padding:8px}.legacy-monitor .dial-box{width:100%}.legacy-monitor .dial{height:220px;max-height:220px}.legacy-monitor .meter{width:75px;height:225px;max-height:225px}.legacy-monitor .meter h3{font-size:8px}.legacy-monitor .led{grid-template-columns:20px 10px;gap:7px}.legacy-monitor .led small{display:none}.legacy-monitor .fit{font-size:7px}.legacy-monitor .dial-readouts>span{font-size:8px}}
+/* Wide central instrument, slender term strips, low performance deck. */
+.legacy-monitor .monitor-grid{grid-template-columns:76px minmax(0,680px) 76px;gap:24px;justify-content:center;align-items:stretch;padding:10px 18px}.legacy-monitor .dial-box{width:100%;height:100%;display:flex;flex-direction:column;align-self:stretch;padding:0}.legacy-monitor .dial{width:100%;height:clamp(280px,40vh,440px);max-height:none;flex:1;min-height:0;background:radial-gradient(ellipse,#19291c 0,#122017 60%,#18221b 85%);border-radius:4px}.legacy-monitor .dial-readouts{justify-content:center;grid-template-columns:1fr 1fr;margin:0;padding:7px 10px 0;gap:20px}.legacy-monitor .dial-readouts>span{text-align:center;font-size:11px}.legacy-monitor .meter{width:76px;height:auto;max-height:none;align-self:stretch;padding:0;overflow:hidden}.legacy-monitor .meter h3{font-size:9px;line-height:1.5;height:35px;overflow:hidden;margin:0 0 8px;padding:0 0 7px}.legacy-monitor .leds{height:0;flex:1;min-height:0;padding:0 5px;gap:8px}.legacy-monitor .led{grid-template-columns:24px 12px;gap:10px;flex:0 0 22px}.legacy-monitor .led small{display:none}.legacy-monitor .led b{font-size:12px}.legacy-monitor .fit{font-size:8px;line-height:1.5;overflow:hidden;max-height:37px;padding-top:5px;margin-top:5px}.performance-panel{max-width:1120px;margin-left:auto;margin-right:auto}.keyboard-head{padding:7px 11px;gap:10px}.keyboard-head .reference-controls{gap:6px}.keyboard-wrap{padding:0 11px 5px}.key{height:38px;padding:3px 5px}.key-row{gap:4px;margin-bottom:4px}.key .pitch{font-size:14px;line-height:16px}.key .physical,.key .shift{font-size:9px}.key.control .pitch{font-size:9px;line-height:11px}.keyboard-foot{padding:5px 11px}.settings{max-width:1120px;margin-left:auto;margin-right:auto;margin-top:16px}footer,main>details{max-width:1120px;margin-left:auto;margin-right:auto}
+@media(min-width:721px) and (max-height:850px){header{padding-top:4px;padding-bottom:4px}.legacy-monitor .section-head{padding:4px 12px}.legacy-monitor .monitor-grid{grid-template-columns:64px minmax(0,620px) 64px;gap:16px;padding:5px 12px}.legacy-monitor .dial{height:clamp(220px,36vh,305px);max-height:none}.legacy-monitor .dial-box{width:100%;height:100%}.legacy-monitor .meter{width:64px;height:auto;max-height:none}.legacy-monitor .meter h3{font-size:8px;height:30px}.legacy-monitor .led{grid-template-columns:22px 10px;gap:8px;flex-basis:20px}.legacy-monitor .leds{padding:0 3px;gap:7px}.legacy-monitor .fit{font-size:7px;max-height:30px}.legacy-monitor .dial-readouts{padding-top:3px}.legacy-monitor .dial-readouts>span{font-size:9px}.legacy-monitor .monitor-foot{padding:2px 12px}.keyboard-head{padding:4px 9px;margin-bottom:3px}.key{height:32px}.key .pitch{font-size:13px;line-height:14px}.key .physical,.key .shift{font-size:8px}.key.control .pitch{font-size:8px;line-height:10px}.keyboard-wrap{padding:0 9px 3px}.keyboard-foot{padding:3px 9px}.key-row{margin-bottom:3px;gap:4px}.panel{margin-bottom:6px}}
+@media(max-width:720px){.legacy-monitor .monitor-grid{grid-template-columns:45px minmax(0,1fr) 45px;gap:8px;padding:8px}.legacy-monitor .meter{width:45px;height:auto;max-height:none}.legacy-monitor .meter h3{font-size:7px;height:32px}.legacy-monitor .dial-box{width:100%;height:100%}.legacy-monitor .dial{height:clamp(220px,58vw,360px);max-height:none}.legacy-monitor .led{grid-template-columns:18px 10px;gap:5px}.legacy-monitor .leds{padding:0;gap:7px}.legacy-monitor .fit{font-size:7px}.legacy-monitor .dial-readouts{padding-top:5px;gap:5px}.legacy-monitor .dial-readouts>span{font-size:8px}.keyboard-wrap{overflow-x:auto}.key{height:38px}}
+.legacy-monitor .dial-box{height:auto}.legacy-monitor .dial{flex:none;aspect-ratio:auto}
+/* Rebuilt monitor: one bounded grid. Content can never set the row height. */
+.odd-monitor{--gold:#b7bd83;--muted:#9bab8d;--red:#ef9a7c;--blue:#8dcad0;background:linear-gradient(125deg,#243026,#17251b);border:1px solid #52604a;box-shadow:inset 0 1px #c1c5a012,0 4px 8px #0004;display:grid;grid-template-rows:42px minmax(0,1fr) 25px;height:clamp(280px,calc(100dvh - 448px),470px);overflow:hidden;margin-bottom:12px}.odd-monitor .section-head{min-height:0;padding:7px 14px;border-bottom:1px solid #43533b;gap:10px;flex-wrap:nowrap}.odd-monitor h2{font-size:14px;letter-spacing:.08em;color:#e2dbc0;white-space:nowrap}.odd-monitor .section-head .right{margin-left:auto;gap:12px;flex-wrap:nowrap;font-size:10px}.odd-monitor input{background:#111e14;border-color:#536347;color:#cfdbb0;padding:3px 6px}.odd-monitor #tolerance{width:65px}.odd-monitor .monitor-grid{display:grid;grid-template-columns:105px minmax(0,1fr) 105px;grid-template-rows:minmax(0,1fr);gap:14px;align-items:stretch;justify-content:stretch;margin:0;padding:10px 14px;min-height:0;min-width:0;overflow:hidden}.odd-monitor .meter{display:grid;grid-template-rows:26px minmax(0,1fr) 29px;grid-row:1;width:auto;min-width:0;min-height:0;height:auto;max-height:none;border:0;border-radius:0;background:transparent;box-shadow:none;padding:0;margin:0;align-self:stretch;overflow:hidden;color:#bac798}.odd-monitor .meter.h{grid-column:1}.odd-monitor .meter.s{grid-column:3}.odd-monitor .meter h3{font-size:10px;line-height:14px;font-weight:500;letter-spacing:0;margin:0;padding:0 0 5px;border-bottom:1px solid #526045;white-space:nowrap;overflow:hidden;color:#c2cda5}.odd-monitor .metric,.odd-monitor .reference{display:none}.odd-monitor .leds{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:7px;min-width:0;min-height:0;height:auto;max-height:100%;padding:8px 4px 0;margin:0;border:0;background:transparent;overflow:hidden;mask-image:linear-gradient(to bottom,#000 93%,transparent)}.odd-monitor .led{display:grid;grid-template-columns:24px 12px 1fr;gap:7px;align-items:center;justify-items:start;flex:0 0 19px;width:auto;min-height:19px;border:0;background:none;box-shadow:none!important;padding:0;opacity:1;color:#7c916c}.odd-monitor .led b{font-weight:400;font-size:11px;justify-self:end}.odd-monitor .led i{width:9px;height:9px;border-radius:50%;border:1px solid #42543a;background:#23341e}.odd-monitor .led.lit{color:#d7dfb1}.odd-monitor .led.lit i{background:#b4e789;border-color:#c6eaa7;box-shadow:0 0 5px #9bd17b,0 0 10px #9fcb5a66}.odd-monitor .led small{display:none}.odd-monitor .fit{font-size:8px;line-height:12px;max-height:none;min-height:0;overflow:hidden;padding-top:4px;margin:0;border-top:1px solid #42543a;color:#99ad84;white-space:normal}.odd-monitor .monitor-empty{font-size:10px;color:#8d9e7e;padding:12px 0}.odd-monitor .dial-box{grid-column:2;grid-row:1;display:grid;grid-template-rows:minmax(0,1fr) 22px;align-self:stretch;width:auto;min-width:0;min-height:0;height:auto;max-width:none;padding:0;margin:0;border:0;box-shadow:none;background:none;overflow:hidden}.odd-monitor .dial-caption{display:none}.odd-monitor .dial{display:block;min-height:0;min-width:0;width:100%;height:100%;max-height:none;aspect-ratio:auto;flex:none;border:0;background:none}.odd-monitor .dial .ring{fill:#101e14;stroke:#7c8e5a;stroke-width:1}.odd-monitor .dial text{fill:#c2cd93;font-size:9px;font-weight:500}.odd-monitor .needle line{filter:drop-shadow(0 0 2px currentColor)}.odd-monitor #needleH{color:#ef9a7c}.odd-monitor #needleS{color:#8dcad0}.odd-monitor .dial-readouts{display:flex;align-items:center;justify-content:center;gap:30px;border:0;padding:0;margin:0;min-width:0;min-height:0;font-weight:400}.odd-monitor .dial-readouts>span{padding:0;border:0;background:none;font-size:10px;text-align:center;white-space:nowrap}.odd-monitor .dial-readouts b{font-size:8px;font-weight:500;margin-right:6px}.odd-monitor .monitor-foot{display:flex;align-items:center;min-height:0;padding:3px 14px;margin:0;border-top:1px solid #43533b;overflow:hidden;color:#94a783;font-size:9px;white-space:nowrap}.odd-monitor #liveNotes{max-width:50%}
+.performance-panel{max-width:none;margin-bottom:12px}.keyboard-head{padding:9px 13px;margin-bottom:5px;gap:12px}.keyboard-wrap{padding:0 13px 7px}.keyboard-foot{padding:6px 13px}.key{height:43px;padding:4px 6px}.key-row{gap:5px;margin-bottom:5px}.key .pitch{font-size:14px;line-height:16px}.key .physical,.key .shift{font-size:9px}.key.control .pitch{font-size:9px;line-height:11px}
+@media(min-width:721px) and (max-height:800px){.odd-monitor{grid-template-rows:34px minmax(0,1fr) 22px;height:clamp(250px,calc(100dvh - 390px),400px);margin-bottom:8px}.odd-monitor .section-head{padding:4px 11px}.odd-monitor .monitor-grid{padding:6px 11px;grid-template-columns:94px minmax(0,1fr) 94px;gap:12px}.odd-monitor .meter h3{font-size:9px}.keyboard-head{padding:5px 10px;margin-bottom:3px}.keyboard-wrap{padding:0 10px 4px}.keyboard-foot{padding:4px 10px}.key{height:37px;padding:3px 5px}.key-row{gap:4px;margin-bottom:4px}.key .pitch{font-size:13px;line-height:15px}.key.control .pitch{font-size:8px;line-height:10px}}
+@media(max-width:720px){.odd-monitor{height:330px;grid-template-rows:58px minmax(0,1fr) 23px}.odd-monitor .section-head{flex-wrap:wrap;gap:5px}.odd-monitor .section-head .right{margin-left:0}.odd-monitor .monitor-grid{grid-template-columns:48px minmax(0,1fr) 48px;gap:6px;padding:8px}.odd-monitor .meter h3{font-size:7px;white-space:normal}.odd-monitor .led{grid-template-columns:19px 9px;gap:5px}.odd-monitor .fit{font-size:7px}.odd-monitor .dial-readouts{gap:9px}.odd-monitor .dial-readouts>span{font-size:8px}.key{height:40px}}
+.psy-shrimp{
+  position:absolute;left:-80px;line-height:1;transform-origin:center;
+  --shrimp-top:10px;--shrimp-size:28px;--shrimp-drift:22s;--shrimp-hue:3.5s;
+  --shrimp-bob:3s;--shrimp-delay:0s;--shrimp-opacity:.68;
+  top:var(--shrimp-top);font-size:var(--shrimp-size);opacity:var(--shrimp-opacity);
+  filter:hue-rotate(0deg) saturate(2.2)
+    drop-shadow(0 0 7px rgba(115,205,255,.65))
+    drop-shadow(0 0 15px rgba(255,95,230,.32));
+  animation:
+    shrimpDrift var(--shrimp-drift) linear infinite,
+    shrimpHue var(--shrimp-hue) linear infinite,
+    shrimpBob var(--shrimp-bob) ease-in-out infinite;
+  animation-delay:var(--shrimp-delay),calc(var(--shrimp-delay) * .31),calc(var(--shrimp-delay) * .17)
+}
+@keyframes shrimpDrift{from{left:-80px}to{left:calc(100vw + 80px)}}
+@keyframes shrimpHue{
+  from{filter:hue-rotate(0deg) saturate(2.2) drop-shadow(0 0 7px rgba(115,205,255,.65)) drop-shadow(0 0 15px rgba(255,95,230,.32))}
+  to{filter:hue-rotate(360deg) saturate(2.2) drop-shadow(0 0 7px rgba(115,205,255,.65)) drop-shadow(0 0 15px rgba(255,95,230,.32))}
+}
+@keyframes shrimpBob{0%,100%{transform:translateY(0) rotate(-4deg) scale(1)}50%{transform:translateY(7px) rotate(5deg) scale(1.08)}}
+@media(prefers-reduced-motion:reduce){.psy-shrimp{animation:none;left:auto;right:16px;opacity:.25}}
+.needle{transition:transform .36s cubic-bezier(.22,.75,.25,1),opacity .06s linear}.shrimp{position:relative;z-index:4}header{position:relative}#shrimpSky{position:fixed;inset:0 0 auto;height:75px;overflow:hidden;pointer-events:none;z-index:3}#shrimpMenu{position:absolute;left:15px;top:65px;z-index:30;width:230px;padding:14px;background:var(--panel);border:1px solid var(--line);box-shadow:0 6px 24px #0006;border-radius:6px}#shrimpMenu[hidden]{display:none}#shrimpToggle{float:right}#shrimpMenu .field{margin-top:12px}#shrimpCountRange{width:145px;margin:10px 5px 0 0}#shrimpCountReadout{font-size:11px}
+body{--ui-bg:#202720;--ui-panel:#303b30;--ui-text:#f0ecd8;--ui-muted:#b8c2a7;--ui-border:#68745c;--ui-field:#172218;--screen:#142319;--screen-text:#cedeb3;--screen-muted:#a5bb8f;--screen-line:#65794f;--screen-ring:#101d13;--cap-top:#eee7d6;--cap-bottom:#d7cfb9;--cap-legend:#646957;--p-legend:#9a382a;--n-legend:#235e6d;--o-legend:#82630a;--ctl-legend:#2b633b}
+body[data-theme=paper]{color-scheme:light;--ui-bg:#e5e0d2;--ui-panel:#f3eedf;--ui-text:#30382b;--ui-muted:#626e55;--ui-border:#a4ab93;--ui-field:#fffbee;--screen:#e4ead8;--screen-text:#324d2c;--screen-muted:#52674a;--screen-line:#81916e;--screen-ring:#f1f4e6;--cap-top:#fffdf3;--cap-bottom:#e5dfce;--cap-legend:#626757;--p-legend:#a03929;--n-legend:#245f78;--o-legend:#846000;--ctl-legend:#2f6940}
+body[data-theme=midnight]{color-scheme:dark;--ui-bg:#111925;--ui-panel:#223044;--ui-text:#e6edf3;--ui-muted:#b3c0d1;--ui-border:#536780;--ui-field:#131f31;--screen:#0f2130;--screen-text:#bcdbdf;--screen-muted:#9ab8c4;--screen-line:#4c7682;--screen-ring:#0b1928;--cap-top:#34465e;--cap-bottom:#25374c;--cap-legend:#b6c4d3;--p-legend:#ffaf96;--n-legend:#9edcff;--o-legend:#efcf7a;--ctl-legend:#a7daa4}
+body,body[data-theme=paper],body[data-theme=midnight]{background:var(--ui-bg);color:var(--ui-text);--panel:var(--ui-panel);--ink:var(--ui-text);--muted:var(--ui-muted);--line:var(--ui-border);--deep:var(--ui-field)}.panel:not(.odd-monitor),body[data-theme=paper] .panel:not(.odd-monitor),body[data-theme=midnight] .panel:not(.odd-monitor){background:var(--ui-panel);border-color:var(--ui-border)}button{color:var(--ui-text);background:var(--ui-field);border-color:var(--ui-border)}input,select{background:var(--ui-field);color:var(--ui-text);border-color:var(--ui-border)}.field,.status,.note-info,footer,details,.settings .field{color:var(--ui-muted)}.settings h2,.eyebrow,.tag{color:var(--ui-muted)}.keyboard-head,.keyboard-foot{border-color:var(--ui-border)}.keyboard-foot,body[data-theme=paper] .keyboard-foot{background:var(--ui-field)}.keyboard-foot #refHz{color:var(--ui-text)}
+.odd-monitor{--gold:var(--screen-text);--red:#f28b6d;--blue:#83c8ef;background:var(--screen);border-color:var(--screen-line);color:var(--screen-text)}.odd-monitor h2,.odd-monitor .meter h3,.odd-monitor .dial-readouts{color:var(--screen-text)}.odd-monitor .section-head,.odd-monitor .monitor-foot,.odd-monitor .meter h3,.odd-monitor .fit{border-color:var(--screen-line)}.odd-monitor .fit,.odd-monitor .monitor-foot,.odd-monitor .monitor-empty,.odd-monitor .led{color:var(--screen-muted)}.odd-monitor input{background:var(--ui-field);color:var(--ui-text);border-color:var(--screen-line)}.odd-monitor .dial text{fill:var(--screen-text)}.odd-monitor .dial .ring{fill:var(--screen-ring);stroke:var(--screen-line)}.odd-monitor .led.lit{color:var(--screen-text)}body[data-theme=paper] .odd-monitor{--red:#bf452d;--blue:#246e9c}body[data-theme=paper] .odd-monitor .led.lit i{background:#478b35;border-color:#326722;box-shadow:0 0 4px #6ca34588}
+.key,.key.control,.key.origin{background:linear-gradient(var(--cap-top),var(--cap-bottom));box-shadow:0 3px 0 #0005,0 4px 3px #0004}.key .physical,.key .shift,.key.control .physical,.key.origin .physical,.key.origin .shift{color:var(--cap-legend)}.key.p{color:var(--p-legend)}.key.n{color:var(--n-legend)}.key.origin{color:var(--o-legend)}.key.control .pitch{color:var(--ctl-legend)}.key.custom{color:var(--cap-legend)}.key.active,.key.control.active,.key.origin.active{background:#d6b66f;color:#23301e}.key.active .pitch,.key.active .physical{color:#23301e}.primary,button.on{background:#c6ab70;color:#172016}.odd-monitor .needle line{filter:none}
+/* Comfortable key proportions without changing the monitor dimensions. */
+.performance-panel{max-width:1240px;margin-left:auto;margin-right:auto}
+.key{height:54px;padding:5px 6px}.key .pitch{font-size:15px;line-height:19px}
+@media(min-width:721px) and (max-height:800px){.key{height:46px;padding:4px 5px}.key .pitch{font-size:14px;line-height:17px}}
+@media(max-width:720px){.key{height:48px}}
+/* Two bounded, top-to-bottom odd-number columns. */
+.odd-monitor .leds{display:grid;grid-auto-flow:column;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(var(--led-rows,7),minmax(0,1fr));gap:0 5px;padding:5px 0;mask-image:none;align-items:center;align-content:stretch}
+.odd-monitor .led{grid-template-columns:21px 9px;gap:5px;min-height:0;height:19px;max-height:100%;justify-content:center}
+.odd-monitor .monitor-empty{grid-column:1/-1;grid-row:1/-1;align-self:start}
+@media(max-width:720px){.odd-monitor .monitor-grid{grid-template-columns:82px minmax(0,1fr) 82px}.odd-monitor .led{grid-template-columns:18px 8px;gap:3px}.odd-monitor .led b{font-size:10px}.odd-monitor .led i{width:8px;height:8px}}
+/* Keep the signed cent error beside its lamp, including in the second column. */
+.odd-monitor .monitor-grid{grid-template-columns:192px minmax(0,1fr) 192px}
+.odd-monitor .leds{column-gap:14px}
+.odd-monitor .led{grid-template-columns:21px 9px minmax(0,1fr);column-gap:5px;justify-content:stretch}
+.odd-monitor .led small{display:block;min-height:0;font:9px/1.2 ui-monospace,Consolas,monospace;font-variant-numeric:tabular-nums;color:var(--screen-text);white-space:nowrap;text-align:left}
+@media(max-width:1000px){.odd-monitor .monitor-grid{grid-template-columns:174px minmax(0,1fr) 174px;gap:9px}.odd-monitor .leds{column-gap:10px}.odd-monitor .led{grid-template-columns:18px 8px minmax(0,1fr);column-gap:4px}.odd-monitor .led i{width:8px;height:8px}.odd-monitor .led small{font-size:8px}}
+@media(max-width:720px){.odd-monitor .monitor-grid{grid-template-columns:158px minmax(0,1fr) 158px;gap:5px}.odd-monitor .leds{column-gap:6px}.odd-monitor .led{grid-template-columns:16px 8px minmax(0,1fr);column-gap:3px}}
+/* Clear, consistent legends on every keycap. */
+.keyboard{font-family:"Segoe UI","Yu Gothic UI",Meiryo,sans-serif}
+.key{height:58px;padding:5px 7px;gap:3px}
+.key .physical{font:500 12px/15px "Segoe UI","Yu Gothic UI",Meiryo,sans-serif;letter-spacing:0;color:var(--cap-legend)}
+.key .pitch{font:400 20px/24px "Segoe UI","Yu Gothic UI",Meiryo,sans-serif;display:flex;align-items:center;justify-content:center;flex:1;min-height:0}
+.key .shift{font:500 11px/15px "Segoe UI",sans-serif;top:5px;right:6px;min-width:18px;text-align:center;border-radius:3px;background:#0000000b}
+.key.control .pitch{font:500 12px/15px "Segoe UI","Yu Gothic UI",Meiryo,sans-serif;overflow-wrap:anywhere}
+.key .hover-ratio{font:400 14px/18px "Segoe UI",sans-serif}
+body,body[data-theme=paper]{--cap-legend:#424a3e;--p-legend:#9b3025;--n-legend:#16576c;--o-legend:#775400;--ctl-legend:#245a32}
+body[data-theme=midnight]{--cap-legend:#d2dce5;--p-legend:#ffaf96;--n-legend:#9edcff;--o-legend:#efcf7a;--ctl-legend:#a7daa4}
+@media(min-width:721px) and (max-height:800px){.key{height:50px;padding:4px 6px}.key .physical{font-size:11px;line-height:13px}.key .pitch{font-size:18px;line-height:21px}.key.control .pitch{font-size:11px;line-height:13px}.key .shift{top:4px;font-size:10px;line-height:13px}}
+@media(max-width:720px){.key{height:54px}.key .physical{font-size:11px}.key.control .pitch{font-size:11px}}
+</style></head><body>
+<header><button class="shrimp" id="shrimp" aria-label="Shrimp">🦐</button><div><div class="eyebrow">ODD HARMONICS · INSTRUMENT 02</div><h1 data-ja="倍音調律きーぼーでぃずむ②" data-en="Harmonics Keyboard 2">倍音調律きーぼーでぃずむ②</h1></div><div class="header-right"><span id="status" class="status">AUDIO OFF</span><button id="language">English</button></div><div id="shrimpMenu" hidden><strong data-ja="エビ遊び" data-en="Shrimp ornaments"></strong><button id="shrimpToggle">OFF</button><label class="field"><span data-ja="数（0〜48匹）" data-en="Count (0–48)"></span><input id="shrimpCountInput" type="number" min="0" max="48" value="3"></label><input id="shrimpCountRange" type="range" min="0" max="48" value="3" aria-label="Shrimp count"><span id="shrimpCountReadout"></span></div></header><div id="shrimpSky" aria-hidden="true"></div>
+<main>
+<section class="panel odd-monitor"><div class="section-head"><span class="tag">01</span><h2 data-ja="奇数整列モニター" data-en="ODD ALIGNMENT MONITOR"></h2><div class="right"><label class="small"><span data-ja="許容幅" data-en="Tolerance"></span> <input id="tolerance" type="number" min="0" max="600" step="0.1" value="35"> cent</label><label class="small"><input id="exact" type="checkbox" checked> <span data-ja="厳密適合優先" data-en="Exact fit first"></span></label></div></div>
+<div class="monitor-grid"><div class="meter h"><h3 data-ja="H — 倍音列" data-en="H — HARMONIC SERIES"></h3><div class="metric"><strong id="hLimit">—</strong><span>ODD LIMIT</span></div><div id="hReference" class="reference">—</div><div class="leds" id="hLeds"></div><div id="hFit" class="fit">—</div></div><div class="dial-box"><div class="dial-caption">REFERENCE · PITCH-NAME CIRCLE</div><svg id="dial" class="dial" viewBox="20 5 240 240" role="img" aria-label="Local H and S reference positions"></svg><div class="dial-readouts"><span><b class="h">H REF</b> <span id="dialHRef">—</span></span><span><b class="s">S REF</b> <span id="dialSRef">—</span></span></div></div><div class="meter s"><h3 data-ja="S — 下方倍音列" data-en="S — SUBHARMONIC SERIES"></h3><div class="metric"><strong id="sLimit">—</strong><span>ODD LIMIT</span></div><div id="sReference" class="reference">—</div><div class="leds" id="sLeds"></div><div id="sFit" class="fit">—</div></div></div><div class="monitor-foot"><span id="monitorMessage"></span><span id="liveNotes">—</span></div></section>
+<section class="panel performance-panel"><div class="keyboard-head"><div><span class="tag">02 · PERFORMANCE</span><h2 data-ja="キー割り当て" data-en="KEY ASSIGNMENTS"></h2></div><label class="field"><span data-ja="配列" data-en="Layout"></span><select id="layout"><option value="us">US</option><option value="jis">JIS</option></select></label><div class="reference-controls"><label class="field"><span data-ja="共通基準音" data-en="Reference"></span><select id="refNote"></select></label><label class="field"><span data-ja="Octave" data-en="Octave"></span><input id="refOctave" type="number" min="-1" max="9" value="4"></label><label class="field"><span data-ja="セントずれ" data-en="Cents offset"></span><input id="cents" type="number" step="any" value="0"></label><label class="field"><span data-ja="比ずれ" data-en="Ratio offset"></span><input id="ratioOffset" value="1" aria-label="Ratio offset"></label><label class="field"><span>Odd Link ρ</span><select id="rho"><option>1</option><option>3</option><option>5</option></select></label></div></div>
+<div class="keyboard-wrap"><div id="keyboard" class="keyboard"></div></div><div class="keyboard-foot"><button id="approx" class="small"></button><label class="small">n <input id="edo" type="number" min="1" step="1" value="12" aria-label="Equal divisions"></label><span class="small" id="refHz"></span><span class="status" data-ja="左クリックで試奏 · 右クリックで編集 · ホバーで比を表示" data-en="Left click to play · Right click to edit · Hover for ratio"></span></div></section>
+<div id="notice" role="status"></div>
+<div class="settings"><section class="panel"><h2>AUDIO ENGINE</h2><div class="controls"><label class="field">A4 · Hz<input id="a4" type="number" min="20" max="20000" step="any" value="440"></label><label class="field"><span data-ja="音量" data-en="Volume"></span><input id="volume" type="range" min="0" max="1" step=".01" value=".5"></label><label class="field"><span data-ja="音色" data-en="Timbre"></span><select id="timbre"></select></label><label class="field">Attack · ms<input id="attack" type="number" min="1" max="10000" value="10"></label><label class="field">Release · ms<input id="release" type="number" min="10" max="10000" value="180"></label><label class="field"><span data-ja="リバーブ" data-en="Reverb"></span><input id="reverb" type="range" min="0" max="1" step=".01" value=".18"></label></div><div class="toolbar"><button id="enable" class="primary" data-ja="発音有効化" data-en="Enable audio"></button><button id="stop" data-ja="全音停止" data-en="All sound off"></button><span class="status">LIMITER ON</span></div></section>
+<section class="panel"><h2>MEAN ENGINE</h2><div class="controls"><label class="field"><span data-ja="平均音" data-en="Mean tone"></span><select id="meanMode"></select></label><label class="field"><span data-ja="平均の種類" data-en="Mean type"></span><select id="meanType"></select></label></div><button id="meanSwitch"></button><div id="meanReadout" class="note-info"></div><div id="snapshotReadout" class="note-info"></div></section>
+<section class="panel"><h2>TRANSPOSE & SESSION</h2><label class="field"><span data-ja="転調方式" data-en="Transpose mode"></span><select id="transposeMode"></select></label><div class="toolbar"><button id="undo" data-ja="転調Undo" data-en="Undo transpose"></button><button id="cancelSustain" data-ja="サステイン解除" data-en="Clear sustain"></button></div><div id="transposeReadout" class="note-info"></div></section></div>
+<footer><div class="toolbar"><button id="export" data-ja="JSON保存" data-en="Save JSON"></button><button id="import" data-ja="JSON読込" data-en="Load JSON"></button><input id="importFile" type="file" accept=".json,application/json" hidden><button id="factoryKeys" data-ja="初期配置を適用" data-en="Apply default keys"></button><button id="reset" data-ja="初期化" data-en="Reset"></button><select id="theme" aria-label="Theme"></select></div><span id="saveStatus"></span><span>HARMONICS KEYBOARD 2 · 2.0.21</span></footer>
+<details><summary data-ja="演奏ガイド・音名対応表" data-en="Playing guide & pitch names"></summary><div id="guide"></div><div id="pairs"></div></details>
+</main>
+<dialog id="editor"><h2 id="editTitle"></h2><form id="editForm"><label class="field"><span data-ja="割り当ての種類" data-en="Assignment type"></span><select id="editKind"></select></label><div id="pitchFields"><label class="field"><span data-ja="音名" data-en="Pitch name"></span><select id="editTone"></select></label><label id="customField" class="field"><span data-ja="正の奇数整数／奇数分数" data-en="Positive odd integer / odd fraction"></span><input id="editRatio" value="7/5" placeholder="21/5"></label><label class="field">Octave Shift<input id="editShift" type="number" min="-4" max="4" value="0"></label></div><label id="rhoField" class="field">ρ<select id="editRho"><option>1</option><option>3</option><option>5</option></select></label><div class="error" id="editError"></div><div class="toolbar"><button type="button" id="editClear" data-ja="割り当て解除" data-en="Clear assignment"></button><button type="button" id="editCancel" data-ja="キャンセル" data-en="Cancel"></button><button class="primary" type="submit" data-ja="保存" data-en="Save"></button></div></form></dialog>
+<dialog id="resetDialog"><h2 data-ja="設定を初期化" data-en="Reset settings"></h2><p data-ja="設定とキー割り当てを初期化しますか？" data-en="Reset settings and key assignments?"></p><div class="toolbar"><button id="resetCancel" data-ja="キャンセル" data-en="Cancel"></button><button id="resetConfirm" class="primary" data-ja="初期化する" data-en="Reset now"></button></div></dialog>
+<script>
+'use strict';
+// Harmonics Keyboard 2. Core algorithms and eight synthesis voices adapted from v1.1.19.
+// Ratios persist as decimal integer strings; BigInt is used for exact arithmetic.
+const $=id=>document.getElementById(id), NOTE_NAMES=['C','C♯','D','E♭','E','F','F♯','G','A♭','A','B♭','B'];
+const STORAGE_KEY='harmonicsKeyboard_2_v1', P_ODDS=[1,9,5,21,3,27,15], N_ODDS=[1,3,5,9,15,21,27];
+const MONITOR_EXACT_TOLERANCE_CENT=.01,MONITOR_MAX_ODD=63,MONITOR_UNISON_DEDUP_CENT=.1;
+let audioCtx=null,masterGain,dryGain,wetGain,reverbNode,mixBus,limiter;
+const KEYBOARD_LAYOUTS = {
+  us: [
+    [
+      {code:"Backquote",label:"` ~"},{code:"Digit1",label:"1 !"},{code:"Digit2",label:"2 @"},{code:"Digit3",label:"3 #"},
+      {code:"Digit4",label:"4 $"},{code:"Digit5",label:"5 %"},{code:"Digit6",label:"6 ^"},{code:"Digit7",label:"7 &"},
+      {code:"Digit8",label:"8 *"},{code:"Digit9",label:"9 ("},{code:"Digit0",label:"0 )"},{code:"Minus",label:"- _"},
+      {code:"Equal",label:"= +"},{code:"Backspace",label:"Backspace",cls:"xwide"}
+    ],
+    [
+      {code:"Tab",label:"Tab",cls:"wide"},{code:"KeyQ",label:"Q"},{code:"KeyW",label:"W"},{code:"KeyE",label:"E"},
+      {code:"KeyR",label:"R"},{code:"KeyT",label:"T"},{code:"KeyY",label:"Y"},{code:"KeyU",label:"U"},
+      {code:"KeyI",label:"I"},{code:"KeyO",label:"O"},{code:"KeyP",label:"P"},{code:"BracketLeft",label:"[ {"},
+      {code:"BracketRight",label:"] }"},{code:"Backslash",label:"\\ |",cls:"wide"}
+    ],
+    [
+      {code:"CapsLock",label:"Caps",cls:"xwide"},{code:"KeyA",label:"A"},{code:"KeyS",label:"S"},{code:"KeyD",label:"D"},
+      {code:"KeyF",label:"F"},{code:"KeyG",label:"G"},{code:"KeyH",label:"H"},{code:"KeyJ",label:"J"},
+      {code:"KeyK",label:"K"},{code:"KeyL",label:"L"},{code:"Semicolon",label:"; :"},{code:"Quote",label:"' \""},
+      {code:"Enter",label:"Enter",cls:"xwide"}
+    ],
+    [
+      {code:"ShiftLeft",label:"Shift",cls:"xwide"},{code:"KeyZ",label:"Z"},{code:"KeyX",label:"X"},{code:"KeyC",label:"C"},
+      {code:"KeyV",label:"V"},{code:"KeyB",label:"B"},{code:"KeyN",label:"N"},{code:"KeyM",label:"M"},
+      {code:"Comma",label:", <"},{code:"Period",label:". >"},{code:"Slash",label:"/ ?"},{code:"ShiftRight",label:"Shift",cls:"xwide"}
+    ],
+    [
+      {code:"ControlLeft",label:"Ctrl",cls:"wide"},{code:"AltLeft",label:"Alt",cls:"wide"},
+      {code:"Space",label:"Space",cls:"space"},{code:"AltRight",label:"Alt",cls:"wide"},
+      {code:"ControlRight",label:"Ctrl",cls:"wide"}
+    ]
+  ],
+  jis: [
+    [
+      {code:"Backquote",label:"半角/全角"},{code:"Digit1",label:"1 !"},{code:"Digit2",label:"2 \""},{code:"Digit3",label:"3 #"},
+      {code:"Digit4",label:"4 $"},{code:"Digit5",label:"5 %"},{code:"Digit6",label:"6 &"},{code:"Digit7",label:"7 '"},
+      {code:"Digit8",label:"8 ("},{code:"Digit9",label:"9 )"},{code:"Digit0",label:"0"},{code:"Minus",label:"- ="},
+      {code:"Equal",label:"^ ~"},{code:"IntlYen",label:"¥ |"},{code:"Backspace",label:"Backspace",cls:"xwide"}
+    ],
+    [
+      {code:"Tab",label:"Tab",cls:"wide"},{code:"KeyQ",label:"Q"},{code:"KeyW",label:"W"},{code:"KeyE",label:"E"},
+      {code:"KeyR",label:"R"},{code:"KeyT",label:"T"},{code:"KeyY",label:"Y"},{code:"KeyU",label:"U"},
+      {code:"KeyI",label:"I"},{code:"KeyO",label:"O"},{code:"KeyP",label:"P"},{code:"BracketLeft",label:"@ `"},
+      {code:"BracketRight",label:"[ {"}
+    ],
+    [
+      {code:"CapsLock",label:"Caps",cls:"xwide"},{code:"KeyA",label:"A"},{code:"KeyS",label:"S"},{code:"KeyD",label:"D"},
+      {code:"KeyF",label:"F"},{code:"KeyG",label:"G"},{code:"KeyH",label:"H"},{code:"KeyJ",label:"J"},
+      {code:"KeyK",label:"K"},{code:"KeyL",label:"L"},{code:"Semicolon",label:"; +"},{code:"Quote",label:": *"},
+      {code:"Backslash",label:"] }"},{code:"Enter",label:"Enter",cls:"xwide"}
+    ],
+    [
+      {code:"ShiftLeft",label:"Shift",cls:"xwide"},{code:"KeyZ",label:"Z"},{code:"KeyX",label:"X"},{code:"KeyC",label:"C"},
+      {code:"KeyV",label:"V"},{code:"KeyB",label:"B"},{code:"KeyN",label:"N"},{code:"KeyM",label:"M"},
+      {code:"Comma",label:", <"},{code:"Period",label:". >"},{code:"Slash",label:"/ ?"},{code:"IntlRo",label:"\\ _"},{code:"ShiftRight",label:"Shift",cls:"xwide"}
+    ],
+    [
+      {code:"ControlLeft",label:"Ctrl",cls:"wide"},{code:"AltLeft",label:"Alt",cls:"wide"},
+      {code:"Space",label:"Space",cls:"space"},{code:"AltRight",label:"Alt",cls:"wide"},
+      {code:"ControlRight",label:"Ctrl",cls:"wide"}
+    ]
+  ]
+};
+
+function gcdBigInt(a,b){
+  a=a<0n?-a:a;b=b<0n?-b:b;
+  while(b!==0n){const t=a%b;a=b;b=t}
+  return a||1n;
+}
+function parsePaletteRatioOffset(text){
+  const raw=String(text??"").trim();
+  if(!raw)return null;
+  const m=raw.match(/^([0-9]+)(?:\s*\/\s*([0-9]+))?$/);
+  if(!m)return null;
+  let n,d;
+  try{n=BigInt(m[1]);d=m[2]===undefined?1n:BigInt(m[2])}catch{return null}
+  if(n<=0n||d<=0n)return null;
+  const g=gcdBigInt(n,d);n/=g;d/=g;
+  const r=Number(n)/Number(d);
+  if(!(Number.isFinite(r)&&r>0))return null;
+  const cents=1200*Math.log2(r);
+  if(!Number.isFinite(cents))return null;
+  return {n,d,ratio:r,cents,label:d===1n?n.toString():`${n.toString()}/${d.toString()}`};
+}
+
+function nearestNote(freq){
+  const mf=69+12*Math.log2(freq/a4()), m=Math.round(mf), c=(mf-m)*100;
+  return {midi:m,name:NOTE_NAMES[((m%12)+12)%12],octave:Math.floor(m/12)-1,cents:c};
+}
+
+function exactRatioEntryBigInt(n,d){
+  if(n<=0n||d<=0n)return null;
+  const g=gcdBigInt(n,d);n/=g;d/=g;
+  return {bn:n,bd:d,n:Number(n),d:Number(d),label:d===1n?n.toString():`${n.toString()}/${d.toString()}`};
+}
+function octaveNormalizeBigIntRatio(n,d){
+  if(n<=0n||d<=0n)return null;
+  while(n<d)n*=2n;
+  while(n>=2n*d)d*=2n;
+  return exactRatioEntryBigInt(n,d);
+}
+function ratioEntryValue(r){
+  if(Number.isFinite(Number(r?.value))&&Number(r.value)>0)return Number(r.value);
+  if(r?.edo)return Math.pow(2,(r.k??0)/r.edo);
+  if(typeof r?.bn==="bigint"&&typeof r?.bd==="bigint")return Number(r.bn)/Number(r.bd);
+  return Number(r?.n)/Number(r?.d);
+}
+function circularCentDistance(a,b){
+  if(!(a>0&&b>0))return Infinity;
+  let d=Math.abs(1200*Math.log2(a/b))%1200;
+  return Math.min(d,1200-d);
+}
+function hungarianAssignment(cost){
+  const n=cost.length;if(!n)return [];
+  const m=cost[0]?.length||0;if(m<n)return null;
+  const u=new Array(n+1).fill(0),v=new Array(m+1).fill(0),p=new Array(m+1).fill(0),way=new Array(m+1).fill(0);
+  for(let i=1;i<=n;i++){
+    p[0]=i;let j0=0;
+    const minv=new Array(m+1).fill(Infinity),used=new Array(m+1).fill(false);
+    do{
+      used[j0]=true;const i0=p[j0];let delta=Infinity,j1=0;
+      for(let j=1;j<=m;j++)if(!used[j]){
+        const cur=cost[i0-1][j-1]-u[i0]-v[j];
+        if(cur<minv[j]){minv[j]=cur;way[j]=j0}
+        if(minv[j]<delta){delta=minv[j];j1=j}
+      }
+      if(!Number.isFinite(delta))return null;
+      for(let j=0;j<=m;j++)if(used[j]){u[p[j]]+=delta;v[j]-=delta}else minv[j]-=delta;
+      j0=j1;
+    }while(p[j0]!==0);
+    do{const j1=way[j0];p[j0]=p[j1];j0=j1}while(j0!==0);
+  }
+  const assignment=new Array(n).fill(-1);
+  for(let j=1;j<=m;j++)if(p[j]>0&&p[j]<=n)assignment[p[j]-1]=j-1;
+  return assignment;
+}
+
+function monitorMod1(x){x=Number(x);return ((x%1)+1)%1}
+function monitorSignedTurnDiff(a,b){return ((a-b+.5)%1+1)%1-.5}
+function monitorPitchClasses(freqs){
+  const out=[];
+  for(const f of freqs||[]){
+    if(!(Number.isFinite(f)&&f>0))continue;
+    const h=monitorMod1(Math.log2(f/a4()));
+    if(!out.some(x=>Math.abs(monitorSignedTurnDiff(h,x))*1200<MONITOR_UNISON_DEDUP_CENT))out.push(h);
+  }
+  return out.sort((a,b)=>a-b);
+}
+function monitorMinimaxCircularCenter(values){
+  if(!values.length)return 0;
+  const xs=values.map(monitorMod1).sort((a,b)=>a-b);if(xs.length===1)return xs[0];
+  let maxGap=-1,maxI=0;
+  for(let i=0;i<xs.length;i++){
+    const a=xs[i],b=(i===xs.length-1?xs[0]+1:xs[i+1]),gap=b-a;
+    if(gap>maxGap){maxGap=gap;maxI=i}
+  }
+  const start=xs[(maxI+1)%xs.length],arc=1-maxGap;
+  return monitorMod1(start+arc/2);
+}
+function monitorAssignmentAtReference(hs,sign,qs,logs,ref,tolerance){
+  const BIG=1e12;
+  const dist=hs.map(h=>logs.map(l=>Math.abs(monitorSignedTurnDiff(h,monitorMod1(ref+sign*l)))*1200));
+  const cost=dist.map(row=>row.map(d=>d<=tolerance+1e-8?d*d:BIG));
+  const assignment=hungarianAssignment(cost);
+  if(!assignment||assignment.some((j,i)=>j<0||dist[i][j]>tolerance+1e-6))return null;
+  return {assignment,dist};
+}
+function monitorEvaluateFixedAssignment(hs,sign,qs,logs,assignment){
+  const implied=hs.map((h,i)=>monitorMod1(h-sign*logs[assignment[i]]));
+  const ref=monitorMinimaxCircularCenter(implied);
+  const signedErrors=hs.map((h,i)=>monitorSignedTurnDiff(h,monitorMod1(ref+sign*logs[assignment[i]]))*1200);
+  const distances=signedErrors.map(Math.abs);
+  const maxError=Math.max(...distances),rms=Math.sqrt(distances.reduce((a,b)=>a+b*b,0)/distances.length);
+  const selectedOdds=assignment.map(j=>qs[j]).sort((a,b)=>a-b);
+  const errorByOdd={};
+  assignment.forEach((j,i)=>{errorByOdd[qs[j]]=signedErrors[i]});
+  return {reference:ref,assignment,selectedOdds,errorByOdd,maxError,rms,sumOdd:selectedOdds.reduce((a,b)=>a+b,0)};
+}
+function monitorFitAtOddLimit(hs,sign,oddLimit,tolerance){
+  const qs=[];for(let q=1;q<=oddLimit;q+=2)qs.push(q);
+  if(qs.length<hs.length)return null;
+  const logs=qs.map(q=>monitorMod1(Math.log2(q))),eps=tolerance/1200;
+  const refs=[],seen=new Set();
+  const add=x=>{x=monitorMod1(x);const k=Math.round(x*1e9);if(!seen.has(k)){seen.add(k);refs.push(x)}};
+  for(const h of hs)for(const l of logs){const c=monitorMod1(h-sign*l);add(c);add(c-eps);add(c+eps)}
+  let best=null;
+  for(const ref0 of refs){
+    const matched=monitorAssignmentAtReference(hs,sign,qs,logs,ref0,tolerance);if(!matched)continue;
+    let cand=monitorEvaluateFixedAssignment(hs,sign,qs,logs,matched.assignment);
+    // Reassign once at the minimax center so the representative is both compact and low-error.
+    const matched2=monitorAssignmentAtReference(hs,sign,qs,logs,cand.reference,tolerance);
+    if(matched2)cand=monitorEvaluateFixedAssignment(hs,sign,qs,logs,matched2.assignment);
+    if(cand.maxError>tolerance+1e-6)continue;
+    if(!best||cand.maxError<best.maxError-1e-8||
+       (Math.abs(cand.maxError-best.maxError)<1e-8&&(cand.rms<best.rms-1e-8||
+       (Math.abs(cand.rms-best.rms)<1e-8&&cand.sumOdd<best.sumOdd))))best=cand;
+  }
+  if(best)best.oddLimit=oddLimit;
+  return best;
+}
+function monitorEstimateSeries(hs,sign,tolerance){
+  if(!hs.length)return null;
+  const first=Math.max(1,2*hs.length-1);
+  // Exact-fit priority: scan the full search range with a tiny numerical tolerance first.
+  // This prevents a lower Odd Limit approximate fit from masking a later exact series
+  // (e.g. {1,15/8}: H {1,15} must beat the approximate {3,11}).
+  for(let L=first;L<=MONITOR_MAX_ODD;L+=2){
+    const exact=monitorFitAtOddLimit(hs,sign,L,MONITOR_EXACT_TOLERANCE_CENT);
+    if(exact){exact.exact=true;return exact}
+  }
+  // No exact representation exists in the search range: fall back to the user tolerance
+  // and retain the original simplicity rule (smallest usable Odd Limit first).
+  for(let L=first;L<=MONITOR_MAX_ODD;L+=2){
+    const fit=monitorFitAtOddLimit(hs,sign,L,tolerance);
+    if(fit){fit.exact=false;return fit}
+  }
+  return null;
+}
+
+function createReverbImpulse(duration=2.6,decay=3.2){
+  const length=Math.max(1,Math.floor(audioCtx.sampleRate*duration));
+  const impulse=audioCtx.createBuffer(2,length,audioCtx.sampleRate);
+  for(let ch=0;ch<2;ch++){
+    const data=impulse.getChannelData(ch);
+    for(let i=0;i<length;i++){
+      const t=i/length;
+      data[i]=(Math.random()*2-1)*Math.pow(1-t,decay);
+    }
+  }
+  return impulse;
+}
+function updateReverb(){
+  if(!audioCtx||!dryGain||!wetGain)return;
+  const mix=Math.max(0,Math.min(1,Number($("reverb").value)||0));
+  const now=audioCtx.currentTime;
+  const dry=Math.cos(mix*Math.PI/2);
+  const wet=Math.sin(mix*Math.PI/2)*.72;
+  dryGain.gain.cancelScheduledValues(now);wetGain.gain.cancelScheduledValues(now);
+  dryGain.gain.setTargetAtTime(dry,now,.015);
+  wetGain.gain.setTargetAtTime(wet,now,.015);
+}
+
+function connectOscillator(bus,sources,now,freq,type="sine",level=1,harmonic=1){
+  const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+  osc.type=type;
+  osc._amtHarmonic=harmonic;
+  osc.frequency.setValueAtTime(freq*harmonic,now);
+  gain.gain.setValueAtTime(level,now);
+  osc.connect(gain);gain.connect(bus);osc.start(now);
+  sources.push(osc);
+  return osc;
+}
+function addNoiseTransient(bus,sources,now,duration=.035,level=.06){
+  const count=Math.max(1,Math.floor(audioCtx.sampleRate*duration));
+  const buffer=audioCtx.createBuffer(1,count,audioCtx.sampleRate);
+  const data=buffer.getChannelData(0);
+  const fadeIn=Math.max(1,Math.min(count,Math.floor(audioCtx.sampleRate*.0015)));
+  const fadeOut=Math.max(1,Math.min(count,Math.floor(audioCtx.sampleRate*.008)));
+  for(let i=0;i<count;i++){
+    const decay=Math.exp(-7*i/count);
+    const inGain=i<fadeIn?Math.sin((i/fadeIn)*Math.PI/2):1;
+    const remaining=count-1-i;
+    const outGain=remaining<fadeOut?Math.sin((remaining/fadeOut)*Math.PI/2):1;
+    data[i]=(Math.random()*2-1)*decay*inGain*outGain;
+  }
+  // バッファの最終サンプルを厳密に0にして、BufferSource自然終了時の段差を除く。
+  data[count-1]=0;
+  const src=audioCtx.createBufferSource(), gain=audioCtx.createGain();
+  src.buffer=buffer;gain.gain.setValueAtTime(level,now);
+  src.connect(gain);gain.connect(bus);src.start(now);sources.push(src);
+}
+function buildVoice(freq,timbre,now){
+  const sources=[];
+  const sourceBus=audioCtx.createGain();
+  const amp=audioCtx.createGain();
+  // ampはアタック／音色固有の減衰専用。
+  // キーリリースは別のreleaseGateで行い、進行中のamp自動化を中断しない。
+  const releaseGate=audioCtx.createGain();
+  const userAttack=Math.max(.001,Number($("attack").value)/1000);
+  const userRelease=Math.max(.01,Number($("release").value)/1000);
+  let attack=userAttack,release=userRelease,peak=.16,sustain=.16,decayTime=0;
+  let outputNode=sourceBus;
+
+  const addFilter=(type,frequency,q=.7)=>{
+    const filter=audioCtx.createBiquadFilter();
+    filter.type=type;filter.frequency.setValueAtTime(frequency,now);filter.Q.setValueAtTime(q,now);
+    sourceBus.connect(filter);outputNode=filter;
+  };
+
+  switch(timbre){
+    case "organ":
+      connectOscillator(sourceBus,sources,now,freq,"sine",1.00,1);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.42,2);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.23,3);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.12,4);
+      attack=Math.max(userAttack,.018);release=Math.max(userRelease,.22);peak=.105;sustain=.105;
+      break;
+    case "strings":
+      connectOscillator(sourceBus,sources,now,freq,"sawtooth",.45,1);
+      connectOscillator(sourceBus,sources,now,freq,"triangle",.42,1);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.16,2);
+      addFilter("lowpass",Math.min(5200,Math.max(1450,freq*10)),.8);
+      attack=Math.max(userAttack,.16);release=Math.max(userRelease,.85);peak=.105;sustain=.09;decayTime=.8;
+      break;
+    case "guitar":
+      connectOscillator(sourceBus,sources,now,freq,"triangle",.82,1);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.34,2);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.18,3);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.09,4);
+      addNoiseTransient(sourceBus,sources,now,.025,.035);
+      addFilter("lowpass",Math.min(6200,Math.max(1800,freq*13)),.7);
+      attack=Math.max(userAttack,.004);release=Math.max(userRelease,.38);peak=.18;sustain=.018;decayTime=.46;
+      break;
+    case "piano":
+      connectOscillator(sourceBus,sources,now,freq,"sine",1.00,1);
+      connectOscillator(sourceBus,sources,now,freq,"triangle",.30,2);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.17,3);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.08,4);
+      connectOscillator(sourceBus,sources,now,freq,"sine",.035,6);
+      addNoiseTransient(sourceBus,sources,now,.018,.028);
+      addFilter("lowpass",Math.min(7600,Math.max(2200,freq*16)),.65);
+      attack=Math.max(userAttack,.003);release=Math.max(userRelease,.52);peak=.17;sustain=.022;decayTime=.68;
+      break;
+    default:
+      connectOscillator(sourceBus,sources,now,freq,["sine","triangle","sawtooth","square"].includes(timbre)?timbre:"triangle",1,1);
+      peak=.16;sustain=.16;
+  }
+
+  outputNode.connect(amp);
+  amp.connect(releaseGate);
+  releaseGate.connect(masterGain);
+  releaseGate.gain.setValueAtTime(1,now);
+  amp.gain.setValueAtTime(.0001,now);
+  amp.gain.exponentialRampToValueAtTime(peak,now+attack);
+  if(decayTime>0) amp.gain.setTargetAtTime(sustain,now+attack,decayTime);
+  return {sources,sourceBus,outputNode,amp,releaseGate,release,timbre,frequency:freq};
+}
+function releaseVoice(v){
+  if(!v||!audioCtx)return;
+  const now=audioCtx.currentTime,rel=Math.max(.06,v.release);
+  const gate=v.releaseGate.gain;
+  gate.cancelScheduledValues(now);
+  gate.setValueAtTime(Math.max(1e-5,gate.value||1),now);
+  gate.exponentialRampToValueAtTime(1e-5,now+rel);
+  const stopAt=now+rel+.04;
+  v.sources.forEach(source=>{try{source.stop(stopAt)}catch{}});
+  window.setTimeout(()=>{
+    const nodes=new Set([v.sourceBus,v.outputNode,v.amp,v.releaseGate,...v.sources]);
+    nodes.forEach(node=>{try{node?.disconnect()}catch{}});
+  },Math.ceil((rel+.14)*1000));
+}
+
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const L=(ja,en)=>state.lang==='en'?en:ja, a4=()=>state.a4;
+function factoryAssignments(){const assignments={};const rows=[['KeyQ','N4',-1],['KeyW','N6',-1],['KeyE','P7',-1],['KeyY','N4',0],['KeyU','N6',0],['KeyI','P7',0],['BracketLeft','N4',1],['BracketRight','N6',1],['Backslash','P6',1],['KeyA','P5',-1],['KeyS','P6',-1],['KeyD','O',0],['KeyF','P2',0],['KeyG','P3',0],['KeyH','P5',0],['KeyJ','P6',0],['KeyK','O',1],['KeyL','P2',1],['Semicolon','P3',1],['Quote','P5',1],['KeyZ','N5',-1],['KeyX','N7',-1],['KeyC','N2',0],['KeyV','N3',0],['KeyB','P4',0],['KeyN','N5',0],['KeyM','N7',0],['Comma','N2',1],['Period','N3',1],['Slash','P4',1],['IntlRo','N5',1]];for(const [code,tone,shift]of rows)assignments[code]={kind:'note',tone,shift};Object.assign(assignments,{Digit1:{kind:'rhoSet',rho:1},Digit2:{kind:'rhoSet',rho:3},Digit3:{kind:'rhoSet',rho:5},Digit4:{kind:'transposeTrigger'},Digit5:{kind:'transposeUndo'},ShiftLeft:{kind:'octaveUp'},ControlLeft:{kind:'octaveDown'},ShiftRight:{kind:'meanSwitch'},Space:{kind:'meanPush'}});return assignments}
+function defaults(){const assignments=factoryAssignments();return {format:'HarmonicsKeyboard2',version:1,lang:'ja',theme:'studio',layout:'us',refNote:0,refOctave:4,cents:0,ratioOffset:'1',rho:1,approx:false,edo:12,a4:440,volume:.5,timbre:'sine',attack:10,release:180,reverb:.18,shrimpEnabled:false,shrimpCount:3,shrimpUnlocked:false,meanMode:'on',meanType:'arithmeticHarmonic',meanAH:'arithmetic',transposeMode:'true',tolerance:35,exact:true,assignments};}
+let state=defaults(), tones={},editingCode=null,temporaryHeldPitch=null;
+const pressed=new Set(), held=new Set(),silent=new Map(), controls=new Map(),overrides=new Map(),sustains=new Map(),voices=new Map(),history=[];
+const releases=new Set();let gestureTimer=0,monitorTimer=0,monitorVersion=0,monitorWorker=null,lastFit=null,lastMonitorKey='',saveTimer=0;
+function rat(n,d=1n){return exactRatioEntryBigInt(BigInt(n),BigInt(d))}
+function oddRatio(text){const raw=String(text).trim().match(/^([0-9]+)(?:\s*\/\s*([0-9]+))?$/);const r=parsePaletteRatioOffset(text);if(!raw||!r||BigInt(raw[1])%2n===0n||BigInt(raw[2]||'1')%2n===0n)throw Error(L('正の奇数整数、または奇数同士の分数を入力してください。','Enter a positive odd integer or a fraction of odd integers.'));if(r.n>9007199254740991n||r.d>9007199254740991n)throw Error(L('分子・分母は9007199254740991以下にしてください。','Numerator and denominator must not exceed 9007199254740991.'));return rat(r.n,r.d)}
+// Deterministic Miller–Rabin + Pollard rho: exact factorization without long trial loops.
+function powmod(a,n,m){let r=1n;for(;n;n>>=1n,a=a*a%m)if(n&1n)r=r*a%m;return r}
+function prime(n){if(n<2n)return false;for(const p of [2n,3n,5n,7n,11n,13n,17n,19n,23n,29n,31n,37n]){if(n===p)return true;if(n%p===0n)return false}let d=n-1n,s=0;while(!(d&1n)){d>>=1n;s++}for(let a of [2n,325n,9375n,28178n,450775n,9780504n,1795265022n]){a%=n;if(!a)continue;let x=powmod(a,d,n);if(x===1n||x===n-1n)continue;let ok=false;for(let j=1;j<s;j++){x=x*x%n;if(x===n-1n){ok=true;break}}if(!ok)return false}return true}
+function divisor(n){if(n%3n===0n)return 3n;for(let c=1n;;c++){let x=2n,y=2n,d=1n;for(let i=0;i<150000&&d===1n;i++){x=(x*x+c)%n;y=(y*y+c)%n;y=(y*y+c)%n;d=gcdBigInt(x-y,n)}if(d>1n&&d<n)return d}}
+const factorCache=new Map();
+function factor(n){if(n===1n)return '1';const k=n.toString();if(factorCache.has(k))return factorCache.get(k);const arr=[];function split(v){if(v===1n)return;if(prime(v)){arr.push(v);return}const d=divisor(v);split(d);split(v/d)}split(n);arr.sort((a,b)=>a<b?-1:1);const counts=new Map();arr.forEach(p=>counts.set(p,(counts.get(p)||0)+1));const supers='⁰¹²³⁴⁵⁶⁷⁸⁹';const txt=[...counts].map(([p,e])=>p.toString()+(e>1?String(e).split('').map(c=>supers[+c]).join(''):'')).join('・');factorCache.set(k,txt);return txt}
+function factors(r){return factor(r.bn)+(r.bd===1n?'':' / '+factor(r.bd))}
+function buildTones(rho=state.rho){const cost=N_ODDS.map(p=>N_ODDS.map(n=>circularCentDistance(ratioEntryValue(octaveNormalizeBigIntRatio(BigInt(p),1n)),ratioEntryValue(octaveNormalizeBigIntRatio(BigInt(rho),BigInt(n))))));const match=hungarianAssignment(cost);const t={};P_ODDS.forEach((n,i)=>{t['P'+(i+1)]={...rat(n),odd:n};t['N'+(i+1)]={...rat(rho,N_ODDS[match[N_ODDS.indexOf(n)]]),odd:N_ODDS[match[N_ODDS.indexOf(n)]]}});return t}
+function assignmentRatio(a){return a.tone==='O'?rat(1):a.tone==='custom'?rat(a.n,a.d):tones[a.tone]}
+function exactKeyRatio(a){const r=assignmentRatio(a);if(!r)return null;let v=octaveNormalizeBigIntRatio(r.bn,r.bd),n=v.bn,d=v.bd;const shift=a.shift||0;if(shift>=0)n<<=BigInt(shift);else d<<=BigInt(-shift);return rat(n,d)}
+function referenceFrequency(){const r=parsePaletteRatioOffset(state.ratioOffset);return state.a4*2**(((state.refOctave+1)*12+state.refNote-69)/12+state.cents/1200)*r.ratio}
+function pitchFrequency(code){if(overrides.has(code))return overrides.get(code);const a=state.assignments[code];if(a?.kind!=='note')return null;const r=exactKeyRatio(a);let v=ratioEntryValue(r);if(state.approx)v=2**(Math.round(state.edo*Math.log2(v))/state.edo);return referenceFrequency()*v}
+function typeOfMean(){return state.meanType==='geometric'?'geometric':state.meanAH}
+function averageFrequency(freqs){const f=freqs.filter(x=>Number.isFinite(x)&&x>0);if(!f.length)return null;return typeOfMean()==='arithmetic'?f.reduce((a,b)=>a+b,0)/f.length:typeOfMean()==='harmonic'?f.length/f.reduce((a,b)=>a+1/b,0):Math.exp(f.reduce((a,b)=>a+Math.log(b),0)/f.length)}
+function meanActive(){return (state.meanMode==='on')!==controlHas('meanPush')}
+function enableAudio(){try{if(!audioCtx){audioCtx=new(window.AudioContext||window.webkitAudioContext)();masterGain=audioCtx.createGain();dryGain=audioCtx.createGain();wetGain=audioCtx.createGain();reverbNode=audioCtx.createConvolver();mixBus=audioCtx.createGain();limiter=audioCtx.createDynamicsCompressor();reverbNode.buffer=createReverbImpulse();masterGain.gain.value=state.volume;masterGain.connect(dryGain);dryGain.connect(mixBus);masterGain.connect(reverbNode);reverbNode.connect(wetGain);wetGain.connect(mixBus);limiter.threshold.value=-7;limiter.knee.value=12;limiter.ratio.value=10;limiter.attack.value=.003;limiter.release.value=.16;mixBus.connect(limiter);limiter.connect(audioCtx.destination);updateReverb();audioCtx.onstatechange=()=>{$('status').textContent=audioCtx.state==='running'?'● AUDIO ON':'○ AUDIO '+audioCtx.state.toUpperCase()}}audioCtx.resume().catch(e=>notice(e.message));$('status').textContent='● AUDIO ON';return true}catch(e){notice(e.message);return false}}
+function voiceCurrent(v,now=audioCtx?.currentTime||0){if(!v.glide)return v.frequency;const g=v.glide,t=Math.max(0,Math.min(1,(now-g.start)/g.duration));return g.from*(g.to/g.from)**t}
+function tuneVoice(v,f){if(Math.abs(v.frequency-f)<1e-9)return;const now=audioCtx.currentTime,from=voiceCurrent(v,now);v.sources.forEach(s=>{if(s.frequency){const h=s._amtHarmonic||1;s.frequency.cancelScheduledValues(now);s.frequency.setValueAtTime(from*h,now);s.frequency.exponentialRampToValueAtTime(f*h,now+.08)}});v.frequency=f;v.glide={from,to:f,start:now,duration:.08}}
+function releaseTracked(v){if(!v)return;releaseVoice(v);v.releaseEnd=audioCtx.currentTime+Math.max(.06,v.release);releases.add(v);setTimeout(()=>{releases.delete(v);scheduleMonitor()},(Math.max(.06,v.release)+.02)*1000)}
+function synchronize(){const wanted=new Map(),notes=[...held].filter(c=>!silent.has(c)).map(c=>[c,pitchFrequency(c)]).filter(([,f])=>f>0&&Number.isFinite(f));if(meanActive()){const f=averageFrequency(notes.map(([,f])=>f));if(f)wanted.set('@mean',f)}else notes.forEach(([c,f])=>wanted.set(c,f));
+ for(const [c,v] of voices)if(!wanted.has(c)){releaseTracked(v);voices.delete(c)}
+ for(const [c,f] of wanted)if([...sustains.keys()].some(hz=>Math.abs(1200*Math.log2(hz/f))<.01)){wanted.delete(c);if(voices.has(c)){releaseTracked(voices.get(c));voices.delete(c)}}
+ if(audioCtx)for(const [c,f] of wanted){if(voices.has(c))tuneVoice(voices.get(c),f);else voices.set(c,buildVoice(f,state.timbre,audioCtx.currentTime))}
+ renderActivity();renderReadouts();scheduleMonitor();}
+// Match the original monitor: active performance + latched sustain, without release tails or intermediate glide pitches.
+function snapshotFrequencies(){return [...voices.values(),...sustains.values()].map(v=>v.frequency).filter(f=>Number.isFinite(f)&&f>0)}
+function allOff(immediate=true){clearTimeout(gestureTimer);pressed.clear();held.clear();silent.clear();controls.clear();for(const v of [...voices.values(),...sustains.values(),...releases]){if(immediate&&audioCtx){releaseVoice(v);v.releaseGate.gain.cancelScheduledValues(audioCtx.currentTime);v.releaseGate.gain.setTargetAtTime(0,audioCtx.currentTime,.005);v.sources.forEach(s=>{try{s.stop(audioCtx.currentTime+.03)}catch{}})}else releaseVoice(v)}voices.clear();sustains.clear();releases.clear();if(immediate&&audioCtx){reverbNode.buffer=createReverbImpulse();}renderActivity();renderReadouts();scheduleMonitor()}
+function cancelSustain(){for(const v of sustains.values())releaseTracked(v);sustains.clear();synchronize()}
+function setRho(rho){state.rho=rho;tones=buildTones();$('rho').value=rho;changed();}
+function meanSwitch(){if(state.meanType==='geometric')return;state.meanAH=state.meanAH==='arithmetic'?'harmonic':'arithmetic';renderReadouts();synchronize();save()}
+function undo(){const prev=history.pop();if(prev){Object.assign(state,prev);syncInputs();changed()}else renderReadouts()}
+function controlHas(kind){return [...controls.values()].some(a=>a.kind===kind)}
+function eligible(code){return !state.assignments[code]||state.assignments[code].kind==='note'}
+function selectorKind(){return ['tempRewrite','tempHold','transposeTrigger'].find(controlHas)}
+function targetFrequency(kind){let codes=[...silent].filter(([,k])=>k===kind).map(([c])=>c);if(!codes.length)codes=[...held].filter(c=>!silent.has(c));const f=codes.map(pitchFrequency).filter(x=>x>0);if(!f.length)return {empty:true};if(!meanActive()&&f.length!==1)return {blocked:true};return {freq:meanActive()?averageFrequency(f):f[0]}}
+function scheduleGesture(){clearTimeout(gestureTimer);gestureTimer=setTimeout(applyGestures,45)}
+function applyGestures(){for(const [code,g] of controls){if(!g.armed)continue;const kind=g.kind;if(kind==='tempRewrite'){let candidates=[...silent].filter(([,k])=>k===kind).map(([c])=>c);if(!candidates.length)candidates=[...held].filter(eligible);if(!candidates.length)continue;if(candidates.length!==1){g.armed=false;notice(L('書換先は1キーだけ選択してください。','Select exactly one rewrite destination.'));continue}const c=candidates[0];if(overrides.has(c))overrides.delete(c);else if(temporaryHeldPitch)overrides.set(c,temporaryHeldPitch);else{notice(L('先に一時書換の音程を保持してください。','Capture a pitch before rewriting.'));g.armed=false;continue}g.armed=false;renderKeyboard();renderReadouts();continue}
+ if(!['transposeTrigger','tempHold','sustainTrigger'].includes(kind))continue;const target=targetFrequency(kind);if(target.empty)continue;g.armed=false;if(target.blocked){notice(L('単音、または平均音モードで選択してください。','Select one note, or enable a mean mode.'));continue}const f=target.freq;
+ if(kind==='tempHold'){temporaryHeldPitch=f;renderReadouts();notice(L('音程を保持しました。','Pitch captured.'))}
+ if(kind==='sustainTrigger'){let found=[...sustains].find(([hz])=>Math.abs(1200*Math.log2(hz/f))<.01);if(found){releaseTracked(found[1]);sustains.delete(found[0])}else if(audioCtx){const existing=[...voices].find(([,v])=>Math.abs(1200*Math.log2(v.frequency/f))<.01);if(existing){sustains.set(f,existing[1]);voices.delete(existing[0])}else sustains.set(f,buildVoice(f,state.timbre,audioCtx.currentTime));}synchronize()}
+ if(kind==='transposeTrigger'){history.push({refNote:state.refNote,cents:state.cents,ratioOffset:state.ratioOffset,refOctave:state.refOctave});if(history.length>100)history.shift();const nn=nearestNote(f);state.refNote=((nn.midi%12)+12)%12;state.cents=state.transposeMode==='et'?0:nn.cents;state.ratioOffset='1';syncInputs();changed();notice(L('基準音名を転調しました。','Reference pitch class transposed.'))}
+ }}
+function press(code){if(pressed.has(code))return;pressed.add(code);const a=state.assignments[code],selector=selectorKind();if(selector&&eligible(code)&&(selector==='tempRewrite'||pitchFrequency(code))){held.add(code);silent.set(code,selector);renderActivity();scheduleGesture();return}
+ if(a&&a.kind!=='note'){controls.set(code,{...a,armed:true});switch(a.kind){case 'rhoSet':setRho(a.rho);break;case 'meanSwitch':meanSwitch();break;case 'meanToggle':state.meanMode=state.meanMode==='on'?'off':'on';$('meanMode').value=state.meanMode;synchronize();save();break;case 'meanPush':synchronize();break;case 'octaveUp':case 'octaveDown':state.refOctave=Math.max(-1,Math.min(9,state.refOctave+(a.kind==='octaveUp'?1:-1)));syncInputs();changed();break;case 'transposeUndo':undo();break;case 'sustainCancel':cancelSustain();break;case 'tempClear':overrides.clear();changed();break;default:scheduleGesture()}}
+ else if(pitchFrequency(code)){held.add(code);synchronize();scheduleGesture()}renderActivity();}
+function release(code){if(!pressed.has(code))return;const g=controls.get(code);if(g?.armed)applyGestures();pressed.delete(code);held.delete(code);silent.delete(code);controls.delete(code);if(g&&!controlHas(g.kind))for(const [c,k] of silent)if(k===g.kind)silent.delete(c);synchronize();scheduleGesture()}
+const kindLabels={none:['未割り当て','Unassigned'],note:['音程','Pitch'],rhoSet:['ρ指定','Set ρ'],transposeTrigger:['転調指定','Transpose'],transposeUndo:['転調Undo','Undo transpose'],octaveUp:['Octave ＋','Octave +'],octaveDown:['Octave −','Octave −'],sustainTrigger:['指定サステイン','Latch sustain'],sustainCancel:['サステイン解除','Clear sustain'],tempHold:['一時書換：保持','Temp: capture'],tempRewrite:['一時書換：書換','Temp: assign'],tempClear:['一時書換：全解除','Temp: clear'],meanPush:['平均音プッシュ','Mean push'],meanToggle:['平均音トグル','Mean toggle'],meanSwitch:['平均切替','Mean A ↔ H']};
+const labelKind=k=>L(...(kindLabels[k]||kindLabels.none));
+function optionList(id,entries,selected){$(id).innerHTML=entries.map(([v,ja,en])=>`<option value="${esc(v)}">${esc(L(ja,en||ja))}</option>`).join('');$(id).value=selected}
+function localize(){document.documentElement.lang=state.lang;document.title=L('倍音調律きーぼーでぃずむ②','Harmonics Keyboard 2');document.querySelectorAll('[data-ja]').forEach(el=>el.textContent=el.dataset[state.lang]);$('language').textContent=state.lang==='ja'?'English':'日本語';optionList('timbre',[['sine','サイン','Sine'],['triangle','三角','Triangle'],['sawtooth','ノコギリ','Sawtooth'],['square','矩形','Square'],['organ','オルガン','Organ'],['strings','ストリングス','Strings'],['guitar','ギター','Guitar'],['piano','ピアノ','Piano']],state.timbre);optionList('meanMode',[['on','オン','On'],['off','オフ','Off']],state.meanMode);optionList('meanType',[['arithmeticHarmonic','算術 / 調和','Arithmetic / harmonic'],['geometric','幾何','Geometric']],state.meanType);optionList('transposeMode',[['true','真転調','True transposition'],['et','平均律調整','Equal-tempered adjustment']],state.transposeMode);optionList('theme',[['studio','計測器','Studio'],['paper','ペーパー','Paper'],['midnight','ミッドナイト','Midnight']],state.theme);optionList('editKind',Object.entries(kindLabels).map(([k,v])=>[k,...v]),'note');$('guide').innerHTML=L('<p>発音有効化を押し、中央のD/F/G/H/JでO1/P2/P3/P5/P6を演奏します。左側はShift −1、右側はShift +1の配置です。US／JISの切替では共通キーの割り当てを共有し、配列固有キーの設定も保持します。JISの「ろ」キーの初期値はN5（+1）です。左クリックは押している間発音。右クリックで音名・Octave Shift・機能を変更できます。入力欄の編集中は演奏キーを受け付けません。Escapeで全音停止。OSが予約するキーはブラウザへ届かない場合があります。演奏時はIMEをOFFにしてください。</p><p>1/2/3キーでρ=1/3/5。4は転調指定、5はUndo、6〜0、−/＝は初期状態では未割り当てです。Spaceは平均音プッシュ、左Shiftはオクターブ上げ、左Ctrlはオクターブ下げ、右Shiftは算術↔調和です。その他の機能は右クリックから割り当てられます。平均音のオン／オフが通常状態です。平均音トグルで通常状態を切り替え、プッシュは押している間だけ通常状態を反転します。</p><p>転調・保持・書換は機能キーを押しながら音程キーを選択します（先に音程キーを押す操作も可）。転調・保持・書換中の新規選択キーは無音です。平均音モードでは複数音から平均を選べます。サステインは単音または平均音を1ジェスチャーで1音ラッチし、同じ周波数を再指定すると解除します。保持音と書換・サステインは周波数スナップショットなので、その後のρ・基準音・近似変更には追従しません。書換済キーの再指定で個別解除できます。</p><p>基準音のセントずれと比ずれは加算・乗算で併用できます。音名比は[1,2)に正規化してから相対Octave Shiftを適用。真転調は選んだ音の連続音名位置を基準に移し、基準オクターブは維持します。平均律調整は選んだ位置を最寄りの12平均律目盛りへ移します。</p><p>モニターのH/S針は実発音から独立推定した各局所系列の「1」です。設定ρの指示針ではありません。旧版と同じく、演奏中の音とサステイン音を対象にし、離鍵後のリリース音と残響は含めません。再調律時は切替先の音高を使います。厳密適合優先ONではOdd Limit 63まで厳密探索し、その後に許容幅内の最小Odd Limitを探します。音名LEDは選ばれた奇数項です。</p><p>設定は自動保存されます。JSONは永続設定のみを保存し、演奏中の音・転調Undo履歴・一時書換・サステインは保存しません。任意分数は約分後の分子分母が奇数であることが必要です（各項は9007199254740991以下）。ローカルHTMLでの保存可否はブラウザ設定に依存するため、JSONも保存できます。</p>', '<p>Enable audio, then play O1/P2/P3/P5/P6 on D/F/G/H/J. Left notes use shift −1 and right notes shift +1. US/JIS share common key assignments and retain layout-specific assignments. The JIS Ro key defaults to N5 (+1). Hold a key with the mouse to audition; right-click to edit its pitch, relative octave shift or control function. Typing in a field does not play notes. Escape stops all sound. OS-reserved keys may not reach the browser; turn off IME when playing.</p><p>1/2/3 set ρ=1/3/5. 4 transposes; 5 undoes; 6–0 and −/= are initially unassigned. All control functions remain available in the editor. Space is mean push, left Shift raises the octave, left Ctrl lowers it, and right Shift switches arithmetic/harmonic. Mean On/Off sets the normal state. Mean toggle changes that state; mean push temporarily inverts it while held.</p><p>Hold the transpose/capture/assign control and select a pitch key, or hold the pitch first. New transpose/capture/assign selectors are silent. A mean mode allows selecting a mean of multiple notes. Sustain latches one note or mean per gesture; selecting that frequency again releases it. Captured, overridden and sustained pitches are frequency snapshots unaffected by later tuning changes. Selecting an overridden key again removes its override.</p><p>Reference cents and ratio offsets combine additively/multiplicatively. Each odd pitch ratio is normalized to [1,2), then its relative octave shift applies. True transposition moves the reference pitch class to the selected continuous position, preserving the reference octave. Equal-tempered adjustment snaps that position to the nearest 12-EDO marker.</p><p>The H/S needles indicate the independently inferred local series origins, not configured ρ. As in the original app, the monitor uses active performance and sustained tones, excluding release and reverb tails. Retuning uses the target pitch. Exact-first searches through Odd Limit 63 before falling back to the simplest fit within tolerance. LEDs indicate selected odd terms.</p><p>Settings auto-save locally. JSON stores persistent settings, not playing notes, undo history, temporary pitches or sustains. Custom reduced numerator and denominator must be odd and at most 9007199254740991. Storage availability for local HTML depends on browser settings; JSON provides a portable backup.</p>');renderKeyboard();renderReadouts();renderPairs();renderMonitor(lastFit);}
+function renderKeyboard(){const rows=KEYBOARD_LAYOUTS[state.layout];$('keyboard').innerHTML=rows.map(row=>'<div class="key-row">'+row.map(k=>{const a=state.assignments[k.code],ov=overrides.has(k.code),note=a?.kind==='note'||ov;let name='',ratio='',cl='';if(note){cl='note '+(['O','P1','N1'].includes(a?.tone)?'origin':a?.tone?.startsWith('P')?'p':a?.tone?.startsWith('N')?'n':'custom');name=a?.kind==='note'?(a.tone==='custom'?factors(assignmentRatio(a)):['O','P1','N1'].includes(a.tone)?'O1':a.tone):'●';ratio=ov?(overrides.get(k.code)/referenceFrequency()).toFixed(6):state.approx?(pitchFrequency(k.code)/referenceFrequency()).toFixed(6):exactKeyRatio(a).label;}else if(a){cl='control';name=labelKind(a.kind)+(a.kind==='rhoSet'?' '+a.rho:'')}
+ return `<button type="button" tabindex="-1" data-code="${k.code}" class="key ${k.cls||''} ${cl} ${pressed.has(k.code)?'active':''} ${ov?'overridden':''}" aria-label="${esc(k.label+' '+name)}"><span class="physical">${esc(k.label)}</span>${note?`<span class="shift">${a?.shift>0?'+':''}${a?.shift||0}</span>`:''}<span class="pitch"><span class="normal">${esc(name)}</span><span class="hover-ratio">${esc(ratio)}</span></span></button>`}).join('')+'</div>').join('');}
+function renderActivity(){document.querySelectorAll('.key').forEach(el=>el.classList.toggle('active',pressed.has(el.dataset.code)))}
+function renderReadouts(){$('refHz').textContent=referenceFrequency().toFixed(3)+' Hz';$('approx').textContent=L('平均律近似','EDO approximation')+' '+(state.approx?'ON':'OFF');$('approx').classList.toggle('on',state.approx);$('approx').setAttribute('aria-pressed',state.approx);$('meanSwitch').textContent=L('平均切替：','Switch mean: ')+({arithmetic:L('算術','Arithmetic'),harmonic:L('調和','Harmonic'),geometric:L('幾何','Geometric')}[typeOfMean()]);$('meanSwitch').disabled=state.meanType==='geometric';$('meanSwitch').title=L('平均音のオン／オフに関係なく、算術平均と調和平均を切り替えます。','Switch arithmetic/harmonic independently of mean On/Off.');const f=voices.get('@mean')?.frequency;$('meanReadout').textContent=L('現在：','Current: ')+(meanActive()?L('平均音','Mean'):L('和音','Chord'))+(f?' · '+f.toFixed(3)+' Hz':'');$('snapshotReadout').textContent=L('保持 ','Captured ')+(temporaryHeldPitch?temporaryHeldPitch.toFixed(3)+' Hz':'—')+L(' · 書換 ',' · Overrides ')+overrides.size+L(' · サステイン ',' · Sustains ')+sustains.size;$('transposeReadout').textContent=L('Undo履歴：','Undo history: ')+history.length;$('undo').disabled=!history.length;}
+function renderPairs(){$('pairs').innerHTML='<table class="pair-table"><tr><th>P</th><th>'+L('奇数比','Odd ratio')+'</th><th>N</th><th>'+L('奇数比','Odd ratio')+'</th><th>n</th></tr>'+P_ODDS.map((_,i)=>{if(i===0)return '<tr><td colspan="5" style="color:var(--gold)">O1 — 1</td></tr>';const p='P'+(i+1),n='N'+(i+1);return `<tr><td class="h">${p}</td><td>${factors(tones[p])}</td><td class="s">${n}</td><td>${factors(tones[n])}</td><td>${tones[n].odd}</td></tr>`}).join('')+'</table>'}
+function syncInputs(){for(const id of ['layout','refNote','refOctave','cents','ratioOffset','rho','edo','a4','volume','timbre','attack','release','reverb','meanMode','meanType','transposeMode','tolerance','theme'])$(id).value=state[id];$('exact').checked=state.exact;document.body.dataset.theme=state.theme;}
+function notice(msg){$('notice').textContent=msg;}
+function save(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));$('saveStatus').textContent=L('● 自動保存済','● Auto-saved')}catch{$('saveStatus').textContent=L('自動保存不可 — JSON保存をご利用ください','Auto-save unavailable — use Save JSON')}}
+function changed(){tones=buildTones();renderKeyboard();renderReadouts();renderPairs();synchronize();save()}
+function edit(code){allOff(false);editingCode=code;const a=state.assignments[code];$('editTitle').textContent=L('キー割り当て：','Key assignment: ')+code;$('editKind').value=a?.kind||'note';$('editTone').innerHTML='<option value="O">O1</option>'+['P','N'].map(group=>'<optgroup label="'+group+'">'+[2,3,4,5,6,7].map(i=>'<option value="'+group+i+'">'+group+i+' ('+esc(factors(tones[group+i]))+')</option>').join('')+'</optgroup>').join('')+'<option value="custom">'+L('任意','Custom')+'</option>';$('editTone').value=['P1','N1'].includes(a?.tone)?'O':a?.tone||'O';$('editRatio').value=a?.tone==='custom'?rat(a.n,a.d).label:'7/5';$('editShift').value=a?.shift||0;$('editRho').value=a?.rho||1;$('editError').textContent='';editVisibility();$('editor').showModal()}
+function editVisibility(){$('pitchFields').classList.toggle('hidden',$('editKind').value!=='note');$('customField').classList.toggle('hidden',$('editTone').value!=='custom');$('rhoField').classList.toggle('hidden',$('editKind').value!=='rhoSet')}
+function validateData(d){if(!d||d.format!=='HarmonicsKeyboard2'||d.version!==1)throw Error(L('Harmonics Keyboard 2形式のJSONが必要です。','A Harmonics Keyboard 2 settings file is required.'));d={...d};if(['none','always','push','toggle'].includes(d.meanMode)){const reverse=d.meanMode==='push'&&Object.values(d.assignments||{}).some(a=>a?.kind==='meanPush')&&Object.values(d.assignments||{}).filter(a=>a?.kind==='meanPush').every(a=>a.pushAction==='chord');d.meanMode=d.meanMode==='always'||reverse?'on':'off'}const out=defaults();const enums={lang:['ja','en'],theme:['studio','paper','midnight'],layout:['us','jis'],rho:[1,3,5],meanMode:['on','off'],meanType:['arithmeticHarmonic','geometric'],meanAH:['arithmetic','harmonic'],transposeMode:['true','et'],timbre:['sine','triangle','sawtooth','square','organ','strings','guitar','piano']};for(const [k,v]of Object.entries(enums)){if(!v.includes(d[k]))throw Error('Invalid '+k);out[k]=d[k]}const ranges={refNote:[0,11,true],refOctave:[-1,9,true],cents:[-120000,120000],edo:[1,1000000,true],a4:[20,20000],volume:[0,1],attack:[1,10000],release:[10,10000],reverb:[0,1],tolerance:[0,600]};for(const[k,[lo,hi,int]]of Object.entries(ranges)){if(typeof d[k]!=='number'||!Number.isFinite(d[k])||d[k]<lo||d[k]>hi||(int&&!Number.isInteger(d[k])))throw Error('Invalid '+k);out[k]=d[k]}const r=parsePaletteRatioOffset(d.ratioOffset);if(!r||r.ratio<1e-6||r.ratio>1e6)throw Error('Invalid reference ratio');out.ratioOffset=r.label;for(const k of ['approx','exact']){if(typeof d[k]!=='boolean')throw Error('Invalid '+k);out[k]=d[k]}const codes=new Set(Object.values(KEYBOARD_LAYOUTS).flat(2).map(k=>k.code));if(!d.assignments||typeof d.assignments!=='object'||Array.isArray(d.assignments))throw Error('Invalid assignments');for(const k of ['shrimpEnabled','shrimpUnlocked'])out[k]=typeof d[k]==='boolean'?d[k]:false;out.shrimpCount=Number.isInteger(d.shrimpCount)&&d.shrimpCount>=0&&d.shrimpCount<=48?d.shrimpCount:3;out.assignments={};for(const[c,a]of Object.entries(d.assignments)){if(!codes.has(c)||!a||!kindLabels[a.kind]||a.kind==='none')throw Error('Invalid assignment');let b={kind:a.kind};if(a.kind==='note'){if(!Number.isInteger(a.shift)||a.shift<-4||a.shift>4)throw Error('Invalid octave shift');b.shift=a.shift;if(a.tone==='custom'){const r=oddRatio(a.n+'/'+a.d);b={...b,tone:'custom',n:r.bn.toString(),d:r.bd.toString()}}else{if(!/^(?:[PN][1-7]|O)$/.test(a.tone))throw Error('Invalid pitch name');b.tone=['P1','N1'].includes(a.tone)?'O':a.tone}}if(a.kind==='rhoSet'){if(![1,3,5].includes(a.rho))throw Error('Invalid rho');b.rho=a.rho}out.assignments[c]=b}return out}
+function installData(d){const next=validateData(d);allOff();state=next;overrides.clear();temporaryHeldPitch=null;history.length=0;tones=buildTones();localize();syncInputs();renderShrimps();if(audioCtx){masterGain.gain.setTargetAtTime(state.volume,audioCtx.currentTime,.015);updateReverb()}changed()}
+function exportJSON(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='Harmonics_Keyboard_2_settings.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+// Monitor searches are kept off the audio/UI thread. This is a pitch-series worker, not FFT.
+function makeMonitorWorker(){const funcs=[hungarianAssignment,monitorMod1,monitorSignedTurnDiff,monitorMinimaxCircularCenter,monitorAssignmentAtReference,monitorEvaluateFixedAssignment,monitorFitAtOddLimit];const source=`const MONITOR_MAX_ODD=63,MONITOR_EXACT_TOLERANCE_CENT=.01;${funcs.map(f=>f.toString()).join('\n')}\nfunction estimate(hs,sign,tolerance,exactFirst){if(!hs.length)return null;const first=Math.max(1,2*hs.length-1);if(exactFirst)for(let L=first;L<=63;L+=2){const f=monitorFitAtOddLimit(hs,sign,L,.01);if(f){f.exact=true;return f}}for(let L=first;L<=63;L+=2){const f=monitorFitAtOddLimit(hs,sign,L,tolerance);if(f){f.exact=f.maxError<=.01;return f}}return null}onmessage=e=>{const {id,hs,tolerance,exact,sign}=e.data;postMessage({id,fit:estimate(hs,sign,tolerance,exact)})}`;const u=URL.createObjectURL(new Blob([source],{type:'text/javascript'}));const w=new Worker(u);URL.revokeObjectURL(u);return w}
+function scheduleMonitor(){if(monitorTimer)return;monitorTimer=requestAnimationFrame(()=>{monitorTimer=0;updateMonitor()})}
+function updateMonitor(){const freqs=audioCtx?snapshotFrequencies():[];const hs=monitorPitchClasses(freqs);$('liveNotes').textContent=freqs.length?freqs.map(f=>f.toFixed(2)+' Hz').join(' · '):'—';const key=JSON.stringify([hs,state.tolerance,state.exact]);if(key===lastMonitorKey)return;lastMonitorKey=key;const id=++monitorVersion;if(monitorWorker){monitorWorker.terminate();monitorWorker=null}if(!hs.length){lastFit=null;renderMonitor(null);return}$('monitorMessage').textContent=L('系列を探索中…','Searching series…');const workers=[];const batch={terminate(){workers.forEach(w=>w.terminate())}};monitorWorker=batch;const pair={count:hs.length};let completed=0;const fail=e=>{batch.terminate();if(id!==monitorVersion)return;monitorWorker=null;lastMonitorKey='';$('monitorMessage').textContent=L('モニター探索に失敗しました：','Monitor search failed: ')+(e.message||'worker error')};try{for(const [side,sign]of [['H',1],['S',-1]]){const w=makeMonitorWorker();workers.push(w);w.onmessage=e=>{if(id!==monitorVersion||e.data.id!==id)return;pair[side]=e.data.fit;w.terminate();if(++completed===2){monitorWorker=null;lastFit=pair;renderMonitor(pair)}};w.onerror=fail;w.postMessage({id,hs,sign,tolerance:state.tolerance,exact:state.exact})}}catch(e){fail(e)}}
+
+let needleTurns={H:null,S:null};
+function dialMarkup(){let svg='<circle class="ring" cx="140" cy="125" r="115"/><circle fill="none" stroke="var(--gold)" opacity=".35" cx="140" cy="125" r="101"/>';for(let i=0;i<120;i++){const a=i/120*2*Math.PI-Math.PI/2,x=Math.cos(a),y=Math.sin(a),r=i%10===0?103:109;svg+='<line x1="'+(140+x*r)+'" y1="'+(125+y*r)+'" x2="'+(140+x*114)+'" y2="'+(125+y*114)+'" stroke="var(--gold)" opacity="'+(i%10===0?.9:.35)+'"/>'}['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'].forEach((n,i)=>{const a=i/12*2*Math.PI-Math.PI/2;svg+='<text x="'+(140+Math.cos(a)*94)+'" y="'+(128+Math.sin(a)*94)+'" text-anchor="middle">'+n+'</text>'});for(const [k,color,len]of [['H','var(--red)',79],['S','var(--blue)',67]])svg+='<g id="needle'+k+'" class="needle unavailable"><line x1="140" y1="136" x2="140" y2="'+(125-len)+'" stroke="'+color+'" stroke-width="3" stroke-linecap="round"/><text x="147" y="'+(137-len)+'" style="fill:'+color+'">'+k+'</text></g>';return svg+'<circle cx="140" cy="125" r="3" fill="#171a10" stroke="var(--gold)" stroke-width="1.3"/>'}
+function updateDial(fit){if(!$('needleH'))$('dial').innerHTML=dialMarkup();for(const k of ['H','S']){const el=$('needle'+k),f=fit?.[k];el.classList.toggle('unavailable',!f);if(!f)continue;const target=monitorMod1(f.reference-.25),prev=needleTurns[k];needleTurns[k]=prev===null?target:prev+monitorSignedTurnDiff(target,monitorMod1(prev));el.style.transform='rotate('+needleTurns[k]*360+'deg)'}}
+function layoutOddColumns(){for(const id of ['hLeds','sLeds']){const el=$(id),height=el.clientHeight-10;const rows=Math.max(7,Math.floor(height/26));el.style.setProperty('--led-rows',rows);el.querySelectorAll('.led').forEach((led,i)=>{led.hidden=i>=rows*2;led.style.display=i>=rows*2?'none':''})}}
+function renderMonitor(fit){updateDial(fit);for(const k of ['H','S']){const f=fit?.[k],nn=f?nearestNote(a4()*2**f.reference):null;$('dial'+k+'Ref').textContent=nn?nn.name+' '+(nn.cents>=0?'+':'')+nn.cents.toFixed(2)+' c':'—'}for(const [p,k]of [['h','H'],['s','S']]){const f=fit?.[k];$(p+'Limit').textContent=f?.oddLimit??'—';$(p+'Reference').textContent=f?(()=>{const nn=nearestNote(a4()*2**f.reference);return '1 → '+nn.name+' '+(nn.cents>=0?'+':'')+nn.cents.toFixed(2)+' c'})():'1 → —';$(p+'Leds').innerHTML=f?Array.from({length:(f.oddLimit+1)/2},(_,i)=>{const q=i*2+1,on=f.selectedOdds.includes(q),err=f.errorByOdd[q],v=Math.abs(err)<.0005?0:err;return '<span title="'+q+(on?' : '+(v>=0?'+':'')+v.toFixed(2)+' cent':'')+'" class="led '+(on?'lit':'')+'"><b>'+q+'</b><i aria-hidden="true"></i><small>'+(on?(v>=0?'+':'')+v.toFixed(1)+'c':'')+'</small></span>'}).join(''):'<span class="monitor-empty">'+(fit?L('適合なし','No fit'):L('現在音なし','No sounding notes'))+'</span>';$(p+'Fit').textContent=f?(f.exact?L('厳密','EXACT'):L('近似','APPROX'))+' · max '+f.maxError.toFixed(3)+' c · RMS '+f.rms.toFixed(3)+' c':'—'}layoutOddColumns();$('monitorMessage').textContent=!fit?L('音を鳴らすと局所系列を推定します。','Play notes to estimate their local series.'):!fit.H||!fit.S?L('許容幅・Odd Limit 63以内に適合する系列なし','No fit within tolerance and Odd Limit 63'):fit.count+L(' 音名 · H / S は独立した局所基準',' pitch classes · H / S are independent local origins')}
+function updateShrimpUI(){$('shrimpToggle').textContent=state.shrimpEnabled?'ON':'OFF';$('shrimpToggle').classList.toggle('on',state.shrimpEnabled);$('shrimpCountInput').value=state.shrimpCount;$('shrimpCountRange').value=state.shrimpCount;$('shrimpCountReadout').textContent=state.shrimpCount+' / 48'}
+function setShrimpCount(v){state.shrimpCount=Math.max(0,Math.min(48,Math.floor(Number(v)||0)));state.shrimpEnabled=state.shrimpCount>0;renderShrimps();save()}
+function renderShrimps(){
+  const sky=$("shrimpSky");
+  if(!sky)return;
+  sky.innerHTML="";
+  if(!state.shrimpUnlocked||!state.shrimpEnabled||state.shrimpCount<=0){updateShrimpUI();return}
+  const count=Math.max(0,Math.min(48,Math.floor(state.shrimpCount)));
+  for(let i=0;i<count;i++){
+    const el=document.createElement("div");
+    el.className="psy-shrimp";
+    el.textContent="🦐";
+    const top=6+((i*23)%42);
+    const size=17+((i*11)%17);
+    const drift=18+((i*7)%23);
+    const hue=2.8+((i*13)%23)/10;
+    const bob=2.2+((i*17)%22)/10;
+    const delay=-(i*5.37)%drift;
+    const opacity=.30+((i*19)%50)/100;
+    el.style.setProperty("--shrimp-top",`${top}px`);
+    el.style.setProperty("--shrimp-size",`${size}px`);
+    el.style.setProperty("--shrimp-drift",`${drift}s`);
+    el.style.setProperty("--shrimp-hue",`${hue}s`);
+    el.style.setProperty("--shrimp-bob",`${bob}s`);
+    el.style.setProperty("--shrimp-delay",`${delay}s`);
+    el.style.setProperty("--shrimp-opacity",String(Math.min(.84,opacity)));
+    sky.appendChild(el);
+  }
+  updateShrimpUI();
+}
+
+const oddColumnObserver=new ResizeObserver(layoutOddColumns);for(const id of ['hLeds','sLeds'])oddColumnObserver.observe($(id));
+// UI wiring.
+$('tolerance').addEventListener('input',()=>{const v=Number($('tolerance').value);if($('tolerance').value!==''&&Number.isFinite(v)&&v>=0&&v<=600){state.tolerance=v;scheduleMonitor();save()}});
+// UI wiring. Keyboard state is keyed by KeyboardEvent.code, never by localized characters.
+$('refNote').innerHTML=NOTE_NAMES.map((n,i)=>`<option value="${i}">${n}</option>`).join('');
+for(const id of ['layout','refNote','refOctave','cents','ratioOffset','rho','edo','a4','volume','timbre','attack','release','reverb','meanMode','meanType','transposeMode','tolerance','theme','exact'])$(id).addEventListener('change',()=>{const prev=state[id];let value=id==='exact'?$('exact').checked:$(id).value;if(typeof prev==='number')value=Number(value);const candidate={...state,[id]:value};try{validateData(candidate);state[id]=value;notice('');if(id==='layout'){allOff();$('layout').blur();}if(id==='timbre'&&audioCtx){for(const[c,v]of voices){releaseTracked(v);voices.delete(c)}}if(id==='volume'&&audioCtx)masterGain.gain.setTargetAtTime(state.volume,audioCtx.currentTime,.015);if(id==='reverb')updateReverb();if(id==='theme')document.body.dataset.theme=state.theme;changed()}catch(e){$(id).value=prev;notice(e.message)}});
+for(const id of ['volume','reverb'])$(id).addEventListener('input',()=>{state[id]=Number($(id).value);if(id==='volume'&&audioCtx)masterGain.gain.setTargetAtTime(state.volume,audioCtx.currentTime,.015);if(id==='reverb')updateReverb();save()});
+$('approx').onclick=()=>{state.approx=!state.approx;changed()};$('language').onclick=()=>{state.lang=state.lang==='ja'?'en':'ja';localize();save()};$('enable').onclick=()=>{enableAudio();synchronize()};$('stop').onclick=()=>allOff();$('meanSwitch').onclick=meanSwitch;$('undo').onclick=undo;$('cancelSustain').onclick=cancelSustain;$('export').onclick=exportJSON;$('import').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>2000000)throw Error('File too large');installData(JSON.parse(await f.text()));notice(L('設定を読み込みました。','Settings loaded.'))}catch(e){notice(L('読込失敗：','Load failed: ')+e.message)}e.target.value=''};$('factoryKeys').onclick=()=>{allOff();overrides.clear();state.assignments=factoryAssignments();changed();notice(L('画像に基づく初期キー配置を適用しました。','Applied the default keyboard layout.'))};$('reset').onclick=()=>{allOff();$('resetDialog').showModal()};$('resetCancel').onclick=()=>$('resetDialog').close();$('resetConfirm').onclick=()=>{$('resetDialog').close();installData(defaults())};$('shrimp').onclick=e=>{e.stopPropagation();if(!state.shrimpUnlocked){state.shrimpUnlocked=true;state.shrimpEnabled=true;if(!state.shrimpCount)state.shrimpCount=3;renderShrimps();save()}$('shrimpMenu').hidden=!$('shrimpMenu').hidden;$('shrimp').setAttribute('aria-expanded',!$('shrimpMenu').hidden)}; $('shrimpToggle').onclick=()=>{if(!state.shrimpCount)state.shrimpCount=3;state.shrimpEnabled=!state.shrimpEnabled;renderShrimps();save()};$('shrimpCountInput').onchange=e=>setShrimpCount(e.target.value);$('shrimpCountRange').oninput=e=>setShrimpCount(e.target.value);document.addEventListener('click',e=>{if(!e.target.closest('#shrimpMenu')&&!e.target.closest('#shrimp')){$('shrimpMenu').hidden=true;$('shrimp').setAttribute('aria-expanded','false')}});window.addEventListener('keydown',e=>{if(e.key==='Escape'){$('shrimpMenu').hidden=true;$('shrimp').setAttribute('aria-expanded','false')}});
+$('keyboard').addEventListener('contextmenu',e=>{const k=e.target.closest('[data-code]');if(k){e.preventDefault();edit(k.dataset.code)}});
+const pointerCodes=new Map();$('keyboard').addEventListener('pointerdown',e=>{if(e.button!==0)return;const k=e.target.closest('[data-code]');if(!k)return;e.preventDefault();enableAudio();pointerCodes.set(e.pointerId,k.dataset.code);$('keyboard').setPointerCapture(e.pointerId);press(k.dataset.code)});for(const ev of ['pointerup','pointercancel','lostpointercapture'])$('keyboard').addEventListener(ev,e=>{const c=pointerCodes.get(e.pointerId);if(c){pointerCodes.delete(e.pointerId);release(c)}});
+window.addEventListener('keydown',e=>{if(e.code==='Escape'){if(!$('editor').open&&!$('resetDialog').open){e.preventDefault();allOff()}return}if(e.isComposing||e.repeat||$('editor').open||$('resetDialog').open||e.target instanceof Element&&e.target.matches('input,select,textarea')||e.metaKey||(e.ctrlKey&&!e.code.startsWith('Control')&&!['ControlLeft','ControlRight'].some(c=>pressed.has(c)&&state.assignments[c]))||(e.altKey&&!e.code.startsWith('Alt')&&!['AltLeft','AltRight'].some(c=>pressed.has(c)&&state.assignments[c])))return;if(!KEYBOARD_LAYOUTS[state.layout].some(row=>row.some(k=>k.code===e.code)))return;if(!state.assignments[e.code]&&!overrides.has(e.code)&&!selectorKind())return;e.preventDefault();enableAudio();press(e.code)});window.addEventListener('keyup',e=>{if(pressed.has(e.code)){e.preventDefault();release(e.code)}});window.addEventListener('blur',()=>allOff());document.addEventListener('visibilitychange',()=>{if(document.hidden)allOff()});
+$('editClear').onclick=()=>{delete state.assignments[editingCode];overrides.delete(editingCode);$('editor').close();changed();notice(L('キー割り当てを解除しました。','Key assignment cleared.'))};$('editKind').onchange=editVisibility;$('editTone').onchange=editVisibility;$('editCancel').onclick=()=>$('editor').close();$('editForm').onsubmit=e=>{e.preventDefault();try{const kind=$('editKind').value;let a={kind};if(kind==='note'){const shift=Number($('editShift').value);if(!Number.isInteger(shift)||shift<-4||shift>4)throw Error(L('Shiftは−4〜＋4の整数です。','Shift must be an integer from −4 to +4.'));a={kind,tone:$('editTone').value,shift};if(a.tone==='custom'){const r=oddRatio($('editRatio').value);a.n=r.bn.toString();a.d=r.bd.toString()}}if(kind==='rhoSet')a.rho=Number($('editRho').value);if(kind==='none')delete state.assignments[editingCode];else state.assignments[editingCode]=a;overrides.delete(editingCode);$('editor').close();changed()}catch(e){$('editError').textContent=e.message}};
+try{const saved=localStorage.getItem(STORAGE_KEY);if(saved)state=validateData(JSON.parse(saved))}catch(e){notice(L('保存設定を読み込めませんでした。初期設定を使用します。','Saved settings could not be loaded; using defaults.'))}
+tones=buildTones();localize();syncInputs();renderReadouts();renderShrimps();save();
+// During a glide, the monitor samples oscillator interpolation rather than target pitch metadata.
+
+</script></body></html>
+
+
