@@ -1,0 +1,170 @@
+<!doctype html><html lang="ja"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>三度圏（仮）</title>
+<style>
+:root{color-scheme:dark;font-family:"Segoe UI Variable","Yu Gothic UI",system-ui,sans-serif;background:#17131e;color:#f8f0ee}*{box-sizing:border-box}body{margin:0;min-height:100svh;display:grid;place-items:center;background:radial-gradient(ellipse at 22% 15%,#63405233,transparent 55%),radial-gradient(ellipse at 85% 85%,#55437a2b,transparent 55%)}main{width:min(94vw,480px);padding:36px 18px}form{display:flex;justify-content:center;gap:9px;flex-wrap:wrap}input,select,button{font:inherit;color:inherit;background:#25212d;border:1px solid #4e404f;border-radius:12px;padding:12px;transition:background .18s,border-color .18s,box-shadow .18s}input{width:85px;font-variant-numeric:tabular-nums}select{cursor:pointer}option{background:#25212d;color:#f8f0ee}button{cursor:pointer}button:hover,select:hover{background:#352b3c;border-color:#a77f99}button:active{background:#49354b}:focus-visible{outline:2px solid #e7b5cf;outline-offset:4px}label{font-size:11px;letter-spacing:.06em;color:#b9a8bc;display:grid;gap:8px}label input,label select{font-size:15px;letter-spacing:0}form button{align-self:end;background:linear-gradient(135deg,#e5b7a1,#cf9fc8);color:#302032;border-color:transparent;font-size:14px;font-weight:600;padding:12px 18px}form button:hover{background:linear-gradient(135deg,#f0cab6,#e0b4da);box-shadow:0 4px 20px #cd9ab71a}output{display:block;text-align:center;margin:48px 0 38px;min-height:132px;padding:12px 0;font-variant-numeric:tabular-nums}#root{font-family:"Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;font-size:64px;font-weight:400;letter-spacing:-.04em;line-height:1.2;color:#f1d6c3;text-shadow:0 3px 30px #f0bb9a18}#cents{font-size:16px;font-weight:300;color:#d2b3ce;margin-left:14px;letter-spacing:.025em}#type{display:block;font-size:13px;letter-spacing:.12em;margin-top:15px;color:#baa6c1}#mode{width:100%;margin-bottom:16px;font-size:13px;padding:14px 16px;background-color:#211c28;border-color:#46394c}.keys{display:grid;grid-template-columns:1fr 1fr;gap:16px}.keys button{font-family:"Palatino Linotype",Palatino,Georgia,serif;font-size:32px;padding:20px;background:linear-gradient(145deg,#332736,#292332);border-color:#685066;color:#efd0d7;box-shadow:inset 0 1px 0 #ffffff08,0 6px 24px #00000014}.keys button:last-child{background:linear-gradient(145deg,#30283c,#262433);border-color:#5b5075;color:#dbc9f2}.keys button:hover{border-color:#d0a3c0;box-shadow:0 0 25px #c894c012}.keys button:active{background:#49354b}#error{color:#ffb3b3;font-size:13px;text-align:center}#error:empty{display:none}@media(max-width:360px){main{padding-inline:10px}form{gap:6px}input{width:76px}form button{padding-inline:13px}#root{font-size:56px}}@media(prefers-reduced-motion:reduce){*{transition:none}}
+.keys button small{display:block;font:11px "Segoe UI",sans-serif;letter-spacing:.08em;margin-top:7px;opacity:.65}.keys button span{font-family:"Segoe UI Symbol",sans-serif}.spelling{display:flex;align-items:center;justify-content:center;gap:12px;margin-top:18px}.spelling select{padding:6px 12px;font-size:17px}#sound{display:block;width:100%;margin:0 0 16px;padding:10px;font-size:13px;color:#b9a8bc}#sound[aria-pressed="true"]{color:#f1d6c3;border-color:#a77f99;background:#352b3c}.phase-setting{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 16px}.phase-setting select{font-size:13px;padding:10px 14px;min-width:60%}.site-footer{margin-top:28px;text-align:center;font-size:12px}.site-footer a{color:#b9a8bc;text-decoration:underline;text-underline-offset:3px}.site-footer a:hover{color:#f1d6c3}</style><main><form id="initial">
+<label>初期根音<select id="note" aria-label="初期根音"></select></label>
+<label>オクターブ<input id="octave" type="number" value="4" min="0" max="8" step="1" required></label>
+<label>セント<input id="offset" type="number" value="0" min="-1200" max="1200" step="any" required></label><button type="submit">開始</button></form>
+<label class="spelling">異名同音<select id="spelling" aria-label="異名同音"><option value="sharp">♯</option><option value="flat">♭</option></select></label>
+<output aria-live="polite"><span id="root"></span><span id="cents"></span><span id="type"></span></output>
+<select id="mode" aria-label="再生音域"><option value="real">実音高</option><option value="fold">1オクターブ内</option><option value="repeat" selected>オクターブ繰り返し</option><option value="layer">重ねる</option></select>
+<label class="phase-setting">発音設定<select id="phase" aria-label="発音設定"><option value="normal">通常</option><option value="aligned">位相を揃える</option></select></label>
+<button id="sound" type="button" aria-pressed="false">発音オフ</button>
+<div class="keys"><button id="left" aria-label="A：左の三和音"><span aria-hidden="true">←</span><small>A</small></button><button id="right" aria-label="D：右の三和音"><span aria-hidden="true">→</span><small>D</small></button></div><p id="error" role="alert"></p><footer class="site-footer"><a href="https://uriop-dogg.github.io/homepage/wooly-homepage-JA-EN-02/index.html">Woolyのホームページ</a></footer></main>
+<script>
+'use strict';
+const names=['C','C♯','D','D♯','E','F','F♯','G','G♯','A','A♯','B'];
+const flatNames=['C','D♭','D','E♭','E','F','G♭','G','A♭','A','B♭','B'];
+const $=id=>document.getElementById(id);
+names.forEach((name,i)=>$('note').add(new Option(name,i)));
+let baseMidi=60,position=0,context,voices=new Map(),generation=0,soundEnabled=false,heldChord=null;
+let phaseNode,phaseReady;
+const phaseSource="class PhaseEngine extends AudioWorkletProcessor {\n constructor(){\n  super();this.voices=new Map();this.master=0;this.masterTarget=0;this.masterLeft=0;\n  this.port.onmessage=({data})=>{\n   this.masterTarget=data.enabled?1:0;this.masterLeft=Math.round(sampleRate*.03);\n   if(!data.targets)return;\n   const active=new Set(data.targets.map(v=>v.key));\n   for(const [key,v] of this.voices)if(!active.has(key)){v.targetGain=0;v.gainLeft=Math.round(sampleRate*.12);v.retiring=true;}\n   // Held tones lead a frequency group so they stay phase-stable during merges.\n   const targets=[...data.targets].sort((a,b)=>Number(b.key.startsWith('held:'))-Number(a.key.startsWith('held:')));\n   for(const target of targets){\n    const f=Math.max(1,Math.min(target.frequency,sampleRate/2-1));\n    let v=this.voices.get(target.key);\n    if(!v){v={key:target.key,phase:0,f,gain:0,leader:null,lockLeft:0};this.voices.set(target.key,v);}\n    v.targetF=f;v.freqLeft=Math.abs(v.f/f-1)<1e-12?0:Math.round(sampleRate*.12);\n    v.multiplier=v.freqLeft?Math.exp(Math.log(f/v.f)/v.freqLeft):1;\n    v.targetGain=target.amplitude;v.gainLeft=Math.round(sampleRate*.12);v.retiring=false;\n   }\n   this.ordered=[...this.voices.values()].sort((a,b)=>Number(b.key.startsWith('held:'))-Number(a.key.startsWith('held:')));\n  };\n  this.ordered=[];\n }\n process(inputs,outputs){\n  const channel=outputs[0][0];if(!channel)return true;\n  for(let n=0;n<channel.length;n++){\n   const groups=new Map();let sum=0;\n   for(const v of this.ordered){\n    if(v.freqLeft){v.f*=v.multiplier;if(--v.freqLeft===0)v.f=v.targetF;}\n    if(v.gainLeft){v.gain+=(v.targetGain-v.gain)/v.gainLeft;v.gainLeft--;}\n    v.phase=(v.phase+v.f/sampleRate)%1;\n    // ~1e-10 relative tolerance only removes floating-point arithmetic noise.\n    const key=v.f.toPrecision(11),leader=groups.get(key);\n    if(leader){\n     if(v.leader!==leader.key){v.leader=leader.key;v.lockLeft=Math.round(sampleRate*.012);}\n     if(v.lockLeft){\n      let difference=leader.phase-v.phase;difference-=Math.round(difference);\n      v.phase=(v.phase+difference/v.lockLeft+1)%1;\n      if(--v.lockLeft===0)v.phase=leader.phase;\n     }else v.phase=leader.phase;\n    }else{groups.set(key,v);v.leader=null;v.lockLeft=0;}\n    sum+=Math.sin(2*Math.PI*v.phase)*v.gain;\n   }\n   if(this.masterLeft){this.master+=(this.masterTarget-this.master)/this.masterLeft;this.masterLeft--;}\n   // Target amplitudes sum to at most .27; transition tails retain headroom.\n   channel[n]=sum*this.master;\n  }\n  this.ordered=this.ordered.filter(v=>{if(v.retiring&&!v.gainLeft){this.voices.delete(v.key);return false;}return true;});\n  for(let i=1;i<outputs[0].length;i++)outputs[0][i].set(channel);\n  return true;\n }\n}\r\n\nregisterProcessor('phase-engine',PhaseEngine);";
+// Prefer the audio rendering thread; older/local-file environments can use
+// the same sample renderer through the legacy callback interface.
+function createCompatiblePhaseNode(){
+ if(typeof context.createScriptProcessor!=='function')throw new Error('No compatible audio processor');
+ let Processor;
+ const Base=class{constructor(){this.port={};}};
+ new Function('AudioWorkletProcessor','registerProcessor','sampleRate',phaseSource)(Base,(_name,type)=>{Processor=type;},context.sampleRate);
+ const processor=new Processor();
+ const node=context.createScriptProcessor(1024,0,1);
+ node.onaudioprocess=event=>{processor.process([],[[event.outputBuffer.getChannelData(0)]]);};
+ return {port:{postMessage:data=>processor.port.onmessage({data})},connect:destination=>node.connect(destination),node};
+}
+async function preparePhaseEngine(){
+ if(!phaseReady){
+  phaseReady=(async()=>{
+   try{
+    if(!context.audioWorklet||typeof AudioWorkletNode!=='function')throw new Error('AudioWorklet unavailable');
+    const url=URL.createObjectURL(new Blob([phaseSource],{type:'text/javascript'}));
+    try{await context.audioWorklet.addModule(url);}finally{URL.revokeObjectURL(url);}
+    phaseNode=new AudioWorkletNode(context,'phase-engine',{numberOfInputs:0,numberOfOutputs:1,outputChannelCount:[1]});
+   }catch(error){phaseNode=createCompatiblePhaseNode();}
+   phaseNode.connect(context.destination);
+  })().catch(error=>{phaseReady=null;throw error;});
+ }
+ await phaseReady;
+}
+function holdParameter(parameter,time){
+ if(typeof parameter.cancelAndHoldAtTime==='function')parameter.cancelAndHoldAtTime(time);
+ else{const value=parameter.value;parameter.cancelScheduledValues(time);parameter.setValueAtTime(value,time);}
+}
+
+function setSound(enabled){
+ soundEnabled=enabled;
+ $('sound').textContent=enabled?'発音オン':'発音オフ';
+ $('sound').setAttribute('aria-pressed',String(enabled));
+ if(enabled){void play();return;}
+ ++generation;
+ phaseNode?.port.postMessage({enabled:false});
+ if(context){const now=context.currentTime;for(const voice of voices.values()){holdParameter(voice.gain.gain,now);voice.gain.gain.linearRampToValueAtTime(0,now+0.03);}}
+}
+// Exact rational chain state; no octave or display rounding feeds back into it.
+function ratioAt(n){
+ const k=Math.floor(n/2),minor=n%2!==0;
+ let numerator=k>=0?3n**BigInt(k):2n**BigInt(-k);
+ let denominator=k>=0?2n**BigInt(k):3n**BigInt(-k);
+ if(minor){numerator*=5n;denominator*=4n;}
+ return {numerator,denominator,minor};
+}
+function current(){const r=ratioAt(position),ratio=Number(r.numerator)/Number(r.denominator);return {...r,ratio,midi:baseMidi+12*Math.log2(ratio)};}
+function frequencies(){
+ const r=current(),base=440*2**((baseMidi-69)/12),root=base*r.ratio;
+ const pitches=[root,root*(r.minor?6/5:5/4),root*3/2];
+ if($('mode').value!=='fold')return pitches;
+ // Fixed band (initial root * 3/4, initial root * 3/2], upper inclusive.
+ const top=base*3/2;
+ return pitches.map(f=>{f*=2**(-Math.ceil(Math.log2(f/top)));if(f>top*(1+1e-12))f/=2;if(f<=top/2*(1-1e-12))f*=2;return f;});
+}
+function render(){
+ const r=current(),pitch=Math.round(r.midi*1000)/1000,nearest=Math.floor(pitch+0.5),cents=Math.round((pitch-nearest)*1000)/10;
+ $('root').textContent=($('spelling').value==='flat'?flatNames:names)[((nearest%12)+12)%12]+($('mode').value==='real'?Math.floor(nearest/12)-1:'');
+ $('cents').textContent=(cents>=0?'+':'−')+Math.abs(cents).toFixed(1)+' ¢';
+ $('type').textContent=r.minor?'短三和音 · minor':'長三和音 · major';
+}
+// A fixed spectral envelope makes the octave copies fade toward both extremes.
+function voiceTargets(sampleRate){
+ const pitches=frequencies(),limit=Math.min(20000,sampleRate/2-1),result=[];
+ const repeat=['repeat','layer'].includes($('mode').value);
+ pitches.forEach((root,i)=>{
+  const first=repeat?Math.ceil(Math.log2(20/root)):0;
+  const last=repeat?Math.floor(Math.log2(limit/root)):0;
+  for(let octave=first;octave<=last;octave++){
+   const frequency=root*2**octave;
+   const valid=frequency>=20&&frequency<=limit;
+   let weight=valid?1:0;
+   if(repeat){
+    const distance=Math.log2(frequency/440);
+    const edge=Math.max(0,Math.min(1,Math.log2(frequency/20),Math.log2(limit/frequency)));
+    weight*=Math.exp(-0.5*(distance/1.5)**2)*Math.sin(edge*Math.PI/2)**2;
+   }
+   result.push({key:i+':'+octave,frequency,weight});
+  }
+ });
+ // Bound the sum of amplitudes, including when many octaves are present.
+ const sum=result.reduce((total,v)=>total+v.weight,0);
+ return result.map(v=>({...v,amplitude:repeat?0.27*v.weight/Math.max(sum,1):0.09*v.weight}));
+}
+function playbackTargets(sampleRate){
+ const moving=voiceTargets(sampleRate);
+ if($('mode').value!=='layer')return moving;
+ // Freeze only the first sounding chord; do not accumulate subsequent chords.
+ heldChord??=moving.map(v=>({...v,key:'held:'+v.key}));
+ return [...moving,...heldChord].map(v=>({...v,amplitude:v.amplitude/2}));
+}
+async function play(){
+ if(!soundEnabled)return;
+ const request=++generation;
+ try{
+ context??=new (window.AudioContext||window.webkitAudioContext)();await context.resume();if(request!==generation)return;
+ if($('phase').value==='aligned'){
+  await preparePhaseEngine();if(request!==generation)return;
+  const now=context.currentTime;
+  for(const voice of voices.values()){holdParameter(voice.gain.gain,now);voice.gain.gain.linearRampToValueAtTime(0,now+.03);}
+  const targets=playbackTargets(context.sampleRate);
+  phaseNode.port.postMessage({enabled:true,targets});
+  $('error').textContent=targets.some(v=>!v.weight)?'可聴域外の構成音は無音です。':'';
+  return;
+ }
+ phaseNode?.port.postMessage({enabled:false});
+ const now=context.currentTime,glide=0.12,targets=playbackTargets(context.sampleRate);
+ const active=new Set(targets.map(v=>v.key));
+ for(const [key,voice] of voices){
+  if(active.has(key))continue;
+  holdParameter(voice.gain.gain,now);
+  voice.gain.gain.linearRampToValueAtTime(0,now+glide);
+  voice.osc.stop(now+glide+0.01);
+  voice.osc.onended=()=>{voice.osc.disconnect();voice.gain.disconnect();};
+  voices.delete(key);
+ }
+ for(const target of targets){
+  const f=Math.max(1,Math.min(target.frequency,context.sampleRate/2-1));
+  let voice=voices.get(target.key);
+  if(!voice){
+   const osc=context.createOscillator(),gain=context.createGain();
+   osc.type='sine';osc.frequency.setValueAtTime(f,now);gain.gain.setValueAtTime(0,now);
+   osc.connect(gain).connect(context.destination);voice={osc,gain};voices.set(target.key,voice);osc.start(now);
+  }
+  // Stable tone/octave keys preserve oscillator phase across chord changes.
+  holdParameter(voice.osc.frequency,now);
+  voice.osc.frequency.exponentialRampToValueAtTime(f,now+glide);
+  holdParameter(voice.gain.gain,now);
+  voice.gain.gain.linearRampToValueAtTime(target.amplitude,now+glide);
+ }
+ $('error').textContent=$('mode').value!=='repeat'&&targets.some(v=>!v.weight)?'可聴域外の構成音は無音です。':'';
+ }catch(e){$('error').textContent=$('phase').value==='aligned'?'位相同期を開始できません。「通常」に切り替えるか、対応ブラウザで開いてください。':'音声を開始できません。開始ボタンを押してください。';}
+}
+function move(direction){if(Math.abs(position+direction)>1000)return;position+=direction;render();void play();}
+$('initial').addEventListener('submit',event=>{event.preventDefault();if(!$('initial').reportValidity())return;baseMidi=(Number($('octave').value)+1)*12+Number($('note').value)+Number($('offset').value)/100;position=0;heldChord=null;render();setSound(true);});
+$('phase').addEventListener('change',()=>{void play();});
+$('sound').addEventListener('click',()=>setSound(!soundEnabled));
+$('left').addEventListener('click',()=>move(-1));$('right').addEventListener('click',()=>move(1));$('mode').addEventListener('change',()=>{heldChord=null;render();void play();});
+document.addEventListener('keydown',event=>{if(event.ctrlKey||event.metaKey||event.altKey||event.isComposing||event.repeat)return;if(event.target.closest('input,select,textarea,[contenteditable="true"]'))return;const key=event.key.toLowerCase();if(key==='a'||key==='d'){event.preventDefault();move(key==='a'?-1:1);}});
+$('spelling').addEventListener('change',()=>{
+ const labels=$('spelling').value==='flat'?flatNames:names;
+ Array.from($('note').options).forEach((option,i)=>{option.textContent=labels[i];});
+ render();
+});
+render();
+</script></html>
