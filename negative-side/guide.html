@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="ja"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#21121f"><title>使い方｜ネガレル</title><link rel="stylesheet" href="./style.css"><script src="./i18n.js" defer></script></head>
+<body class="help-document"><main class="guide-page"><header><h1>使い方</h1><p>ネガレル - Negallel -</p><label class="language-control" data-no-i18n><span>言語 / Language</span><select id="language" aria-label="言語 / Language"><option value="ja">日本語</option><option value="en">English</option></select></label></header><article class="console guide-content">
+<h2>音声を読み込む</h2><p>音声ファイルを入力枠にドロップするか、枠を押して選択します。MP3・WAVなど、お使いのブラウザが読み込める形式に対応しています。音声は端末内で処理され、サーバーには送信されません。</p>
+<h2>反転先を選ぶ</h2><p>時計の針をドラッグ、または盤面をタップして選びます。時計の外側の倍音位置（×1・×3など）を押して選ぶこともできます。「整数選択」の＋／−では奇数とその逆数の位置を順に選べます。</p><p>「オクターブ基準」は反転処理の基準音です。「A4チューニング」と「セント値ずれ」で基準周波数を調整できます。「表示下限・上限」は時計に表示する倍音位置の範囲です。</p>
+<p>「12平均律に吸着」をオンにすると、時計の固定音名位置に近づいたときに吸着します。「倍音位置に吸着」と両方オンの場合は近い方を優先します。矢印キーによる微調整と倍音位置の直接選択は、そのまま使えます。</p><h2>変換する</h2><p>「変換する」を押すと処理が始まります。途中で中断する場合は「停止」を押してください。最初は初期設定のAGLA・窓長4096・反復24回で試せます。</p><p>窓長や反復回数で音の質感と処理時間が変わります。長い音声や大きな窓長では時間とメモリを多く使うため、まず短い音声で試してください。処理中はページを開いたままにしてください。</p>
+<h2>聴き比べて保存する</h2><p>再生ボタンで再生・一時停止、再生バーで位置、音量バーで音量を調整します。変換完了後は「元音声」「変換後」で、同じ再生位置を引き継いで切り替えられます。一時停止中に切り替えると、停止状態を保ちます。</p><p>「元音声を保存」は読み込んだファイルを、「変換後を保存」は変換結果をWAV形式で保存します。別の音声の読込や再変換で結果が置き換わるため、残したい結果は先に保存してください。</p>
+<h2>水晶と光の色</h2><p>読み込んだ音声の周波数分布に応じて、水晶と後光の色がゆっくり変化します。「光の色」でA＝赤／C＝赤を切り替えられます。この設定は変換音声には影響しません。</p>
+<h2>変換について</h2><p>周波数成分の振幅をオクターブごとに反転し、位相を推定して音声に戻します。音符を置き換える処理ではないため、元音声とは音色も変わります。</p>
+<a class="guide-back" href="./index.html">ネガレルに戻る</a></article></main><script src="./guide-i18n.js" defer></script><script src="./locale-init.js" defer></script></body></html>
